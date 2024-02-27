@@ -30,6 +30,11 @@ public class Order {
 	@JoinColumn(name="order_id")
 	private Order order;
 	
+	//constructor
+	public Order() {
+		
+	}
+	
 	
 
 }
