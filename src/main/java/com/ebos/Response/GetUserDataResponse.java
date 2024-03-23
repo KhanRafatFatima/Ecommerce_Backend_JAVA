@@ -2,17 +2,18 @@ package com.ebos.Response;
 
 import com.ebos.tables.User;
 
-public class GetUserResponse {
+public class GetUserDataResponse {
 	
-	  private Boolean success;
+	  private Boolean status;
 	  private String message;
 	  private User user;
 	
-	  public Boolean getSuccess() {
-		return success;
+	 
+	public Boolean getStatus() {
+		return status;
 	}
-	public void setSuccess(Boolean success) {
-		this.success = success;
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 	public String getMessage() {
 		return message;

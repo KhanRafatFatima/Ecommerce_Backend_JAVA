@@ -1,25 +1,26 @@
 package com.ebos.Response;
 
 public class ApiResponse {
-    private Boolean success;
+    private String status;
     private String message;
     
    public ApiResponse() {}
 
-   public ApiResponse(Boolean success, String message) {
-        this.success = success;
+   public ApiResponse(String status, String message) {
+        this.status = status;
         this.message = message;
     }
 
-    public Boolean getSuccess() {
-        return success;
-    }
+  
+	public String getStatus() {
+	return status;
+  }
 
-    public void setSuccess(Boolean success) {
-        this.success = success;
-    }
+  public void setStatus(String status) {
+	this.status = status;
+   }
 
-    public String getMessage() {
+	public String getMessage() {
         return message;
     }
 

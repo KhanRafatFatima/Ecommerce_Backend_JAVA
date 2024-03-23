@@ -1,32 +1,27 @@
 package com.ebos.tables;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Products {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long productId;
-	
-	private String productName;
-	
-	private String productDesc;
-	
-	private String productColor;
-	
-	private Long productPrice;
-    
-	@ManyToOne
-	@JoinColumn(name="category_id")
-	private Category category;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long productId;
+
+    private String productName;
+
+    private String productDesc;
+
+    private String productColor;
+
+    private Long productPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "category_type")
+    private Category category;
+
 	
 	public Products() {
 		
@@ -71,14 +66,26 @@ public class Products {
 	public void setProductPrice(Long  productPrice) {
 		this.productPrice = productPrice;
 	}
+	
 
-	public Products(String productName, String productDesc, String productColor,Long  productPrice) {
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public Products(String productName, String productDesc, String productColor, Long productPrice, Category category) {
 		super();
 		this.productName = productName;
 		this.productDesc = productDesc;
 		this.productColor = productColor;
 		this.productPrice = productPrice;
+		this.category = category;
 	}
+
+
 	
 	
 

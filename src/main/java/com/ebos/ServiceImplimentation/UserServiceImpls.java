@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ebos.Request.SignUpRequest;
 import com.ebos.Response.ApiResponse;
 import com.ebos.Response.DeleteResponse;
-import com.ebos.Response.GetUserResponse;
+import com.ebos.Response.GetUserDataResponse;
 import com.ebos.Response.SetListResponse;
 import com.ebos.Response.UpdateResponse;
 import com.ebos.Service.UserService;
@@ -36,25 +36,25 @@ public class UserServiceImpls implements UserService {
 		return setListResponse;
 	}
 
-      public GetUserResponse getUserData() {	
-		GetUserResponse  userResponse = new GetUserResponse();
-		try {
-			UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//      public GetUserDataResponse getUserData() {	
+//		GetUserDataResponse  userResponse = new GetUserDataResponse();
+//		try {
+//			UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//
+//			Optional<User> user2 = userRepository.findById(user.getId());
+//			
+//			User user3 = user2.get();
+//			userResponse.setUser(user3);
+//			userResponse.setStatus(true);
+//			userResponse.setMessage("success");
+//			
+//			return userResponse;
+//			
+//		}catch (Exception e) {
+//			return userResponse;
+//		}
 
-			Optional<User> user2 = userRepository.findById(user.getId());
-			
-			User user3 = user2.get();
-			userResponse.setUser(user3);
-			userResponse.setSuccess(true);
-			userResponse.setMessage("success");
-			
-			return userResponse;
-			
-		}catch (Exception e) {
-			return userResponse;
-		}
-
-	}
+	
 
 	
 	public DeleteResponse deleteUser() {

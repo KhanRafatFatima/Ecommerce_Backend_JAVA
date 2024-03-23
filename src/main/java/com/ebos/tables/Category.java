@@ -1,33 +1,23 @@
 package com.ebos.tables;
 
-import java.util.HashSet;
+import jakarta.persistence.*;
 import java.util.Set;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Category {
-   
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long categoryId;
-	
-	private String categoryName;
-	
-	private String categoryType;
-	
-	@ManyToOne
-	@JoinColumn(name="product_id")
-	private Products products;
-	
-	@OneToMany(mappedBy = "category")
-	private Set<Products> product = new HashSet<>();
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long categoryId;
+
+    private String categoryName;
+
+    private String categoryType;
+
+    @OneToMany(mappedBy = "category")
+    private Set<Products> products;
+
+    // Constructors, getters, and setters...
 	
 	public Category() {
 	
@@ -50,23 +40,8 @@ public class Category {
 		this.categoryName = categoryName;
 	}
 
-	public Products getProducts() {
-		return products;
-	}
 
-	public void setProducts(Products products) {
-		this.products = products;
-	}
-
-
-	public Category(String categoryName, String categoryType, Products products) {
-		super();
-		this.categoryName = categoryName;
-		this.categoryType = categoryType;
-		this.products = products;
-	}
-
-
+	
 	public String getCategoryType() {
 		return categoryType;
 	}
@@ -76,6 +51,30 @@ public class Category {
 		this.categoryType = categoryType;
 	}
    
+
+
+	public Set<Products> getProducts() {
+		return products;
+	}
+
+
+	public void setProducts(Set<Products> products) {
+		this.products = products;
+	}
+
+
+	public Category(String categoryName, String categoryType, Set<Products> products) {
+		super();
+		this.categoryName = categoryName;
+		this.categoryType = categoryType;
+		this.products = products;
+	}
+
+
+	
+
+
+
 	
 	
 	

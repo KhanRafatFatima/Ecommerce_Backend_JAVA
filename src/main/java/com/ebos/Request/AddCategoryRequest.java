@@ -4,6 +4,22 @@ public class AddCategoryRequest {
 	
 	private String categoryName;
 	
+	private String categoryType;
+	
+	public AddCategoryRequest(String categoryName, String categoryType) {
+		super();
+		this.categoryName = categoryName;
+		this.categoryType = categoryType;
+	}
+
+	public String getCategoryType() {
+		return categoryType;
+	}
+
+	public void setCategoryType(String categoryType) {
+		this.categoryType = categoryType;
+	}
+
 	public AddCategoryRequest() {
 		
 	}
@@ -16,10 +32,7 @@ public class AddCategoryRequest {
 		this.categoryName = categoryName;
 	}
 
-	public AddCategoryRequest(String categoryName) {
-		super();
-		this.categoryName = categoryName;
-	}
+	
 	
 	
 }

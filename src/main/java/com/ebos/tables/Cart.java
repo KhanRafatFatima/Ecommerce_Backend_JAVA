@@ -1,29 +1,25 @@
 package com.ebos.tables;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
-@Entity 
+@Entity
 public class Cart {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@OneToOne
-	@JoinColumn(name="user_id")
-	private User user;
-	
-	@ManyToOne 
-	@JoinColumn(name="product_id")
-	private Products products;
-	
-	private Long quantity;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Products products;
+
+    private Long quantity;
+
+    // Constructors, getters, and setters...
 	
 	public Cart() {
 	
@@ -63,6 +59,7 @@ public class Cart {
 		this.quantity = quantity;
 	}
 
+	
 	public Cart(User user, Products products, Long quantity) {
 		super();
 		this.user = user;

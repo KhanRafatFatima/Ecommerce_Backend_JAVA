@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ebos.Request.AddCategoryRequest;
+import com.ebos.Request.AddPaymentTypeRequest;
 import com.ebos.Request.AddProductRequest;
 import com.ebos.Response.AddCategoryResponse;
 import com.ebos.Response.AddProductResponse;
+import com.ebos.Response.ApiResponse;
 import com.ebos.Response.DeleteProductAndCategoryResponse;
 import com.ebos.Response.DeleteResponse;
 import com.ebos.Response.SetListResponse;
@@ -60,6 +62,33 @@ public class SellerController {
 
 	        return new ResponseEntity<>(response, httpStatus);
 	    }
+	 
+	 @DeleteMapping("/deleteCategory/{id}")
+	    public ResponseEntity<DeleteProductAndCategoryResponse> deleteCategory(@PathVariable Long id) {
+	        DeleteProductAndCategoryResponse response = sellerService.deleteCategory(id);
+
+	        // Check the status in the response and return the appropriate HTTP status
+	        HttpStatus httpStatus = response.getStatus().equalsIgnoreCase("True") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+
+	        return new ResponseEntity<>(response, httpStatus);
+	    }
+	 
+		@PostMapping("/addPaymentType")
+	    public ResponseEntity<ApiResponse> addPaymentType(@RequestBody AddPaymentTypeRequest addPaymentTypeRequest) {
+			ApiResponse response =  sellerService.addpaymentType(addPaymentTypeRequest);
+
+	        // Check the status in the response and return the appropriate HTTP status
+	        HttpStatus httpStatus = response.getStatus().equalsIgnoreCase("True") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+
+	        return new ResponseEntity<>(response, httpStatus);
+	    }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	@GetMapping("/getAllUsers") 
 	public SetListResponse findAll() {
 		return userService.findAll();

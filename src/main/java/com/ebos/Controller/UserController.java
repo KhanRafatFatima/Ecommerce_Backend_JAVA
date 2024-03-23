@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ebos.Request.SignUpRequest;
 import com.ebos.Response.ApiResponse;
 import com.ebos.Response.DeleteResponse;
-import com.ebos.Response.GetUserResponse;
+import com.ebos.Response.GetUserDataResponse;
 import com.ebos.Response.SetListResponse;
 import com.ebos.Response.UpdateResponse;
 import com.ebos.Service.UserService;
@@ -28,16 +28,16 @@ public class UserController {
 	private UserService userService;
 
 
-	@GetMapping("/get")
-	public ResponseEntity<?> getUserData() {
-		
-		try {
-			return new ResponseEntity<GetUserResponse>(userService.getUserData(), HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<GetUserResponse>(userService.getUserData(),
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+//	@GetMapping("/get")
+//	public ResponseEntity<?> getUserData() {
+//		
+//		try {
+//			return new ResponseEntity<GetUserDataResponse>(userService.getUserData(), HttpStatus.OK);
+//		} catch (Exception e) {
+//			return new ResponseEntity<GetUserDataResponse>(userService.getUserData(),
+//					HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
 
 	@PutMapping("/updateUserInfo")
 	public ResponseEntity<?> updateUserInfo(@RequestBody SignUpRequest signUpRequest) {

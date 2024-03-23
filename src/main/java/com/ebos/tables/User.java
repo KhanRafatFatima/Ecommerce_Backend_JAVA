@@ -1,64 +1,67 @@
 package com.ebos.tables;
 
-
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.hibernate.annotations.NaturalId;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.hibernate.annotations.NaturalId;
 
 @Entity
 public class User {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@NotBlank
-	@Size(max = 40)
-	private String name;
+    @NotBlank
+    @Size(max = 40)
+    private String name;
 
-	@NotBlank
-	@Size(max = 15)
-	private String username;
+    @NotBlank
+    @Size(max = 15)
+    private String username;
 
-	@NaturalId
-	@NotBlank
-	@Size(max = 40)
-	@Email
-	private String email;
+    @NaturalId
+    @NotBlank
+    @Size(max = 40)
+    @Email
+    private String email;
 
-	@NotBlank
-	@Size(max = 100)
-	private String password;
-	
-	private LocalDate registerDate;
-	
-	@NotNull
-	@Digits(integer = 10, fraction = 0, message = "Mobile number must be 10 digits")
-	private Long mobileNo;
+    @NotBlank
+    @Size(max = 50)
+    private String password;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<>();
-	
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name="user_order",joinColumns = @JoinColumn(name="user_id"),inverseJoinColumns = @JoinColumn(name="order_id"))
-	private Set<Order> orders=new HashSet<>();
-	
-	
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Address_Details address_Details;
-	
-	@OneToOne(mappedBy ="user",cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-	private Cart cart;
+    private LocalDate registerDate;
+
+    @NotNull
+    @Digits(integer = 10, fraction = 0, message = "Mobile number must be 10 digits")
+    private Long mobileNo;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "user_order", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "order_id"))
+    private Set<OrderDetails> orderDetails = new HashSet<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserAddress userAddress;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Cart cart;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Payment payment;
+
+
+    
 	
      public User() {
 
@@ -140,13 +143,38 @@ public class User {
 		this.roles = roles;
 	}
 
-	public Address_Details getAddress_Details() {
-		return address_Details;
+	public UserAddress getAddress_Details() {
+		return userAddress;
 	}
 
-	public void setAddress_Details(Address_Details address_Details) {
-		this.address_Details = address_Details;
+	public void setAddress_Details(UserAddress userAddress) {
+		this.userAddress = userAddress;
 	}
+
+	public Set<OrderDetails> getOrders() {
+		return orderDetails;
+	}
+
+	public void setOrders(Set<OrderDetails> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
+	}
+	
 	
 	
 	

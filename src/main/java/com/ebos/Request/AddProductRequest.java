@@ -10,6 +10,12 @@ public class AddProductRequest {
 	
 	private Long productPrice;
 	
+	//private Long categoryId;
+	
+	private String categoryName;
+	
+	private String categoryType;
+	
 	public AddProductRequest() {
 		
 	}
@@ -46,14 +52,44 @@ public class AddProductRequest {
 		this.productPrice = productPrice;
 	}
 
-	public AddProductRequest(String productName, String productDesc, String productColor, Long productPrice) {
+//	public Long getCategoryId() {
+//		return categoryId;
+//	}
+//
+//	public void setCategoryId(Long categoryId) {
+//		this.categoryId = categoryId;
+//	}
+	
+	
+	
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public String getCategoryType() {
+		return categoryType;
+	}
+
+	public void setCategoryType(String categoryType) {
+		this.categoryType = categoryType;
+	}
+
+	public AddProductRequest(String productName, String productDesc, String productColor, Long productPrice,
+			 String categoryName, String categoryType) {
 		super();
 		this.productName = productName;
 		this.productDesc = productDesc;
 		this.productColor = productColor;
 		this.productPrice = productPrice;
+		this.categoryName = categoryName;
+		this.categoryType = categoryType;
 	}
+
 	
-	
+
 
 }
