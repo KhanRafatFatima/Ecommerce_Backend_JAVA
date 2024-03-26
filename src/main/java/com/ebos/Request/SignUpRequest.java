@@ -1,5 +1,7 @@
 package com.ebos.Request;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -9,8 +11,20 @@ import jakarta.validation.constraints.Size;
 public class SignUpRequest {
 	
 	@NotBlank
-    @Size(min = 4, max = 40)
-    private String name;
+    @Size(min = 2, max = 40)
+    private String firstname;
+	
+	@NotBlank
+    @Size(min = 2, max = 40)
+    private String middlename;
+	
+	@NotBlank
+    @Size(min = 3, max = 40)
+    private String lastname;
+	
+	private String intro;
+	    
+	private String profile;
 
     @NotBlank
     @Size(min = 3, max = 15)
@@ -28,17 +42,19 @@ public class SignUpRequest {
     @NotNull
 	@Digits(integer = 10, fraction = 0, message = "Mobile number must be 10 digits")
 	private Long mobileNo;
+    
+    private LocalDate registeredDate;
 
 
-    public String getName() {
-        return name;
-    }
+    public LocalDate getRegisteredDate() {
+		return registeredDate;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setRegisteredDate(LocalDate registeredDate) {
+		this.registeredDate = registeredDate;
+	}
 
-    public String getUsername() {
+	public String getUsername() {
         return username;
     }
 
@@ -69,6 +85,48 @@ public class SignUpRequest {
 	public void setMobileNo(Long mobileNo) {
 		this.mobileNo = mobileNo;
 	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getMiddlename() {
+		return middlename;
+	}
+
+	public void setMiddlename(String middlename) {
+		this.middlename = middlename;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public String getIntro() {
+		return intro;
+	}
+
+	public void setIntro(String intro) {
+		this.intro = intro;
+	}
+
+	public String getProfile() {
+		return profile;
+	}
+
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+	
+	
     
     
 }

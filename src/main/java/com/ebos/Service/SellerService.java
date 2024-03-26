@@ -18,7 +18,7 @@ public interface SellerService {
 	
 	public DeleteProductAndCategoryResponse deleteCategory(Long id);
 	
-	public ApiResponse addpaymentType(AddPaymentTypeRequest addPaymentTypeRequest);
+	//public ApiResponse addpaymentType(AddPaymentTypeRequest addPaymentTypeRequest);
 	
 	
 }

@@ -17,27 +17,18 @@ public class UserPrincipal implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+		private Long id;
+	    private String firstname;
+	    private String username;
+	    private String email;
+	    private String password;
+	    private Collection<? extends GrantedAuthority> authorities;
+	    private Long mobileNo;
 
-	private String name;
-
-	@JsonIgnore
-	private String username;
-
-	@JsonIgnore
-	private String email;
-
-	@JsonIgnore
-	private String password;
-
-	private Collection<? extends GrantedAuthority> authorities;
-
-	private Long mobileNo;
-
-	public UserPrincipal(Long id, String name, String username, String email, String password, Long mobileNo,
+	public UserPrincipal(Long id, String firstname, String username, String email, String password, Long mobileNo,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
-		this.name = name;
+		this.firstname = firstname;
 		this.username = username;
 		this.email = email;
 		this.password = password;
@@ -49,7 +40,7 @@ public class UserPrincipal implements UserDetails {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 
-		return new UserPrincipal(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getPassword(),
+		return new UserPrincipal(user.getId(), user.getFirstname(), user.getUsername(), user.getEmail(), user.getPassword(),
 				user.getMobileNo(),authorities);
 	}
 
@@ -62,7 +53,7 @@ public class UserPrincipal implements UserDetails {
 	}
 
 	public String getName() {
-		return name;
+		return firstname;
 	}
 
 	public String getEmail() {
@@ -110,13 +101,12 @@ public class UserPrincipal implements UserDetails {
 
 		return true;
 	}
-	
-	
-	
-	
-	
-	
-	
 
+	public String getFirstname() {
+		return firstname;
+	}
+	
+	
+	
 
 }

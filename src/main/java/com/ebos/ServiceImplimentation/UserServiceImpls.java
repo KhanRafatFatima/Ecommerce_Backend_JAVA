@@ -90,7 +90,7 @@ public class UserServiceImpls implements UserService {
 			User user3 = user2.get();
 			
 			user3.setEmail(signUpRequest.getEmail());
-			user3.setName(signUpRequest.getName());
+			//user3.setName(signUpRequest.getName());
 			user3.setUsername(signUpRequest.getUsername());
 			user3.setPassword(signUpRequest.getPassword());
 			

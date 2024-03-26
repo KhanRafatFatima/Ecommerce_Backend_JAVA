@@ -20,14 +20,12 @@ import com.ebos.Response.GetUserDataResponse;
 import com.ebos.Service.BuyerService;
 import com.ebos.repository.Order_DetailsRepository;
 import com.ebos.repository.PaymentRepository;
-import com.ebos.repository.PaymentTypeRepository;
 import com.ebos.repository.ProductRepository;
 import com.ebos.repository.UserAddressRepository;
 import com.ebos.repository.UserRepository;
 import com.ebos.security.UserPrincipal;
 import com.ebos.tables.OrderDetails;
-import com.ebos.tables.Payment;
-import com.ebos.tables.PaymentType;
+import com.ebos.tables.Transaction;
 import com.ebos.tables.Products;
 import com.ebos.tables.User;
 import com.ebos.tables.UserAddress;
@@ -50,8 +48,6 @@ public class BuyerServiceImpl implements BuyerService{
 	@Autowired
 	PaymentRepository paymentRepository;
 	
-	@Autowired
-	PaymentTypeRepository paymentTypeRepository;
 	
 
 
@@ -67,10 +63,17 @@ public class BuyerServiceImpl implements BuyerService{
 			 if(userOptional.isPresent()) {
 				 User user=userOptional.get();
 				 
-				 tempMap.put("Name", user.getName());
+				 tempMap.put("Name", user.getFirstname());
+				 tempMap.put("MiddleName", user.getLastname());
+				 tempMap.put("LastName", user.getMiddlename());
 				 tempMap.put("Username",user.getUsername());
 				 tempMap.put("Email", user.getEmail());
 				 tempMap.put("mobileNo", user.getMobileNo());
+				// Check if the authenticated user has the "Seller" role
+			        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
+				 tempMap.put("Profile",user.getProfile());
+				 tempMap.put("Intro", user.getIntro());
+			        }
 				 
 				 list.add(tempMap);
 				 
@@ -146,17 +149,17 @@ public class BuyerServiceImpl implements BuyerService{
 	                    if (productOptional.isPresent()) {
 	                        Products product = productOptional.get();
 
-	                        Payment payment = new Payment();
-	                        payment.setAmount(product.getProductPrice()); // Assuming product has a getPrice() method
-	                        payment.setPaymentDate(LocalDateTime.now());
-	                        payment.setStatus(userOrderProductRequest.getStatus());
+	                        Transaction transaction = new Transaction();
+	                        transaction.setAmount(product.getProductPrice()); // Assuming product has a getPrice() method
+	                        //transaction.setPaymentDate(LocalDateTime.now());
+	                        transaction.setStatus(userOrderProductRequest.getStatus());
 
-	                        Optional<PaymentType> paymentTypeOptional = paymentTypeRepository.findById(userOrderProductRequest.getPaymentTypeId());
-	                        payment.setPaymentType(paymentTypeOptional.orElse(null)); // Set payment type if found
+	                        //Optional<PaymentType> paymentTypeOptional = paymentTypeRepository.findById(userOrderProductRequest.getPaymentTypeId());
+	                        //transaction.setPaymentType(paymentTypeOptional.orElse(null)); // Set payment type if found
 
-	                        payment.setUser(user);
+	                        transaction.setUser(user);
 
-	                        paymentRepository.save(payment);
+	                        paymentRepository.save(transaction);
 
 	                        apiResponse.setStatus("Success");
 	                        apiResponse.setMessage("Payment added Successfully");
@@ -194,14 +197,14 @@ public class BuyerServiceImpl implements BuyerService{
 	                        Products product = productOptional.get();
 
 	                        OrderDetails orderDetails = new OrderDetails();
-	                        orderDetails.setProducts(product);
+	                       // orderDetails.setProducts(product);
 	                        orderDetails.setOrderdDateTime(LocalDateTime.now());
 
 	                        // Assuming you have a one-to-one mapping between User and UserAddress
 	                        UserAddress userAddress = user.getAddress_Details();
 	                        orderDetails.setAddress_Details(userAddress);
 
-	                        Optional<Payment> paymentOptional = paymentRepository.findById(userOrderProductRequest.getPaymentId());
+	                        Optional<Transaction> paymentOptional = paymentRepository.findById(userOrderProductRequest.getPaymentId());
 	                        orderDetails.setPayment(paymentOptional.orElse(null)); // Set payment if found
 
 	                        order_DetailsRepository.save(orderDetails);

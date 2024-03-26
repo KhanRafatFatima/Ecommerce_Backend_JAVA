@@ -10,11 +10,11 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
 
-    private String categoryName;
+    private String categoryTitle;
 
     private String categoryType;
 
-    @OneToMany(mappedBy = "category")
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     private Set<Products> products;
 
     // Constructors, getters, and setters...
@@ -32,16 +32,18 @@ public class Category {
 		this.categoryId = categoryId;
 	}
 
-	public String getCategoryName() {
-		return categoryName;
-	}
-
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-
 
 	
+	public String getCategoryTitle() {
+		return categoryTitle;
+	}
+
+
+	public void setCategoryTitle(String categoryTitle) {
+		this.categoryTitle = categoryTitle;
+	}
+
+
 	public String getCategoryType() {
 		return categoryType;
 	}
@@ -63,9 +65,9 @@ public class Category {
 	}
 
 
-	public Category(String categoryName, String categoryType, Set<Products> products) {
+	public Category(String categoryTitle, String categoryType, Set<Products> products) {
 		super();
-		this.categoryName = categoryName;
+		this.categoryTitle = categoryTitle;
 		this.categoryType = categoryType;
 		this.products = products;
 	}

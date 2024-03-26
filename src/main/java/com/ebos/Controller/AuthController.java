@@ -1,5 +1,7 @@
  package com.ebos.Controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,9 +83,19 @@ public class AuthController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        // Creating user's account
-        User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
-                signUpRequest.getEmail(), signUpRequest.getPassword(),signUpRequest.getMobileNo());
+        User user = new User(
+            signUpRequest.getFirstname(),  // Firstname
+            signUpRequest.getMiddlename(), // Middlename
+            signUpRequest.getLastname(),   // Lastname
+            signUpRequest.getUsername(),   // Username
+            signUpRequest.getMobileNo(),   // Mobile number
+            signUpRequest.getEmail(),      // Email
+            signUpRequest.getPassword(),   // Password
+            LocalDateTime.now(),               // Registered date (assuming it's set to the current date)
+            signUpRequest.getIntro(),      // Intro
+            signUpRequest.getProfile()     // Profile
+        );
+
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

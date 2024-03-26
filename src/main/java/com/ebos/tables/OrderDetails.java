@@ -3,7 +3,7 @@ package com.ebos.tables;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 public class OrderDetails {
@@ -11,6 +11,8 @@ public class OrderDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
+    
+    
 
     @OneToOne
     @JoinColumn(name = "Address_id")
@@ -18,11 +20,13 @@ public class OrderDetails {
 
     @OneToOne
     @JoinColumn(name = "Payment_id")
-    private Payment payment;
+    private Transaction transaction;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Products products;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "order_product",
+               joinColumns = @JoinColumn(name = "order_id"),
+               inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private Set<Products> products;
 
     private LocalDateTime orderdDateTime;
     
@@ -32,13 +36,12 @@ public class OrderDetails {
 
     
     
-	public OrderDetails(Long orderId, UserAddress userAddress, Payment payment, Products products,
+	public OrderDetails(Long orderId, UserAddress userAddress, Transaction transaction,
 			LocalDateTime orderdDateTime) {
 		super();
 		this.orderId = orderId;
 		this.userAddress = userAddress;
-		this.payment = payment;
-		this.products = products;
+		this.transaction = transaction;
 		this.orderdDateTime = orderdDateTime;
 	}
 
@@ -75,21 +78,15 @@ public class OrderDetails {
 		this.userAddress = userAddress;
 	}
 
-	public Payment getPayment() {
-		return payment;
+	public Transaction getPayment() {
+		return transaction;
 	}
 
-	public void setPayment(Payment payment) {
-		this.payment = payment;
+	public void setPayment(Transaction transaction) {
+		this.transaction = transaction;
 	}
 
-	public Products getProducts() {
-		return products;
-	}
-
-	public void setProducts(Products products) {
-		this.products = products;
-	}
+	
 
 	
 

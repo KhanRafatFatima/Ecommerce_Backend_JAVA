@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,12 +22,22 @@ public class User {
 
     @NotBlank
     @Size(max = 40)
-    private String name;
+    private String firstname;
+    
+    @Size(max=40)
+    private String middlename;
+    
+    @Size(max=40)
+    private String lastname;
 
     @NotBlank
     @Size(max = 15)
     private String username;
-
+    
+    @NotNull
+    @Digits(integer = 10, fraction = 0, message = "Mobile number must be 10 digits")
+    private Long mobileNo;
+    
     @NaturalId
     @NotBlank
     @Size(max = 40)
@@ -34,14 +45,16 @@ public class User {
     private String email;
 
     @NotBlank
-    @Size(max = 50)
+    //@Size(min=6,max = 50)
     private String password;
 
-    private LocalDate registerDate;
+    private LocalDateTime registeredDate;
+    
+    private String intro;
+    
+    private String profile;
 
-    @NotNull
-    @Digits(integer = 10, fraction = 0, message = "Mobile number must be 10 digits")
-    private Long mobileNo;
+    //
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -58,23 +71,26 @@ public class User {
     private Cart cart;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Payment payment;
+    private Transaction transaction;
 
-
-    
-	
-     public User() {
+    public User() {
 
     }
 
-    public User(String name, String username, String email, String password, Long mobileNo) {
-        this.name = name;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.mobileNo = mobileNo;
-        this.registerDate = LocalDate.now();  // Set the current date
-    }
+	public User( String firstname,String middlename,String lastname,  String username, Long mobileNo, String email, String password,
+			LocalDateTime registeredDate, String intro, String profile) {
+		super();
+		this.firstname = firstname;
+		this.middlename = middlename;
+		this.lastname = lastname;
+		this.username = username;
+		this.mobileNo = mobileNo;
+		this.email = email;
+		this.password = password;
+		this.registeredDate = registeredDate;
+		this.intro = intro;
+		this.profile = profile;
+	}
 
 
 	public Long getId() {
@@ -85,12 +101,69 @@ public class User {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+
+	public String getFirstname() {
+		return firstname;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getMiddlename() {
+		return middlename;
+	}
+
+	public void setMiddlename(String middlename) {
+		this.middlename = middlename;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public LocalDateTime getRegisteredDate() {
+		return registeredDate;
+	}
+
+	public void setRegisteredDate(LocalDateTime registeredDate) {
+		this.registeredDate = registeredDate;
+	}
+
+	public String getIntro() {
+		return intro;
+	}
+
+	public void setIntro(String intro) {
+		this.intro = intro;
+	}
+
+	public String getProfile() {
+		return profile;
+	}
+
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+
+	public Set<OrderDetails> getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(Set<OrderDetails> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+	public UserAddress getUserAddress() {
+		return userAddress;
+	}
+
+	public void setUserAddress(UserAddress userAddress) {
+		this.userAddress = userAddress;
 	}
 
 	public String getUsername() {
@@ -127,14 +200,6 @@ public class User {
 	}
 	
 
-	public LocalDate getRegisterDate() {
-		return registerDate;
-	}
-
-	public void setRegisterDate(LocalDate registerDate) {
-		this.registerDate = registerDate;
-	}
-
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -167,16 +232,12 @@ public class User {
 		this.cart = cart;
 	}
 
-	public Payment getPayment() {
-		return payment;
+	public Transaction getPayment() {
+		return transaction;
 	}
 
-	public void setPayment(Payment payment) {
-		this.payment = payment;
-	}
-	
-	
-	
-	
+	public void setPayment(Transaction transaction) {
+		this.transaction = transaction;
+	}	
 	
 }

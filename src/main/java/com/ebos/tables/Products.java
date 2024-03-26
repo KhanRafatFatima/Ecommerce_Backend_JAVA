@@ -1,7 +1,12 @@
 package com.ebos.tables;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Set;
+
+import com.ebos.repository.Order_DetailsRepository;
 
 @Entity
 public class Products {
@@ -10,17 +15,45 @@ public class Products {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
-    private String productName;
+    private String productTitle;
 
     private String productDesc;
 
-    private String productColor;
+    private String productSummary;
 
     private Long productPrice;
+    
+    private LocalDateTime productCreatedDate;
+    
+    private LocalDateTime productUpdatedDate;
+    
+    private LocalDateTime productPublishedDate;
+    
+    private Long sellerId;
 
-    @ManyToOne
-    @JoinColumn(name = "category_type")
-    private Category category;
+    private Long quantity;
+    
+    private BigDecimal discount;
+    
+    private LocalDateTime saleStartsDate;	
+    
+    private LocalDateTime salesEndDate;
+    
+    private String productBannerImage;
+    
+    @ManyToMany
+    @JoinTable(name="product_category",joinColumns = @JoinColumn(name="product_id"),
+                                       inverseJoinColumns =@JoinColumn(name="category_id"))
+    private Set<Category> categories;
+    
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<ProductImages> images;
+    
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<ProductReview> reviews;
+    
+    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
+    private Set<OrderDetails> orders;
 
 	
 	public Products() {
@@ -35,13 +68,7 @@ public class Products {
 		this.productId = productId;
 	}
 
-	public String getProductName() {
-		return productName;
-	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
 
 	public String getProductDesc() {
 		return productDesc;
@@ -51,13 +78,7 @@ public class Products {
 		this.productDesc = productDesc;
 	}
 
-	public String getProductColor() {
-		return productColor;
-	}
-
-	public void setProductColor(String productColor) {
-		this.productColor = productColor;
-	}
+	
 
 	public Long  getProductPrice() {
 		return productPrice;
@@ -68,22 +89,138 @@ public class Products {
 	}
 	
 
-	public Category getCategory() {
-		return category;
+//	public Category getCategory() {
+//		return category;
+//	}
+//
+//	public void setCategory(Category category) {
+//		this.category = category;
+//	}
+	
+	
+
+	public String getProductTitle() {
+		return productTitle;
 	}
 
-	public void setCategory(Category category) {
-		this.category = category;
+	public void setProductTitle(String productTitle) {
+		this.productTitle = productTitle;
 	}
 
-	public Products(String productName, String productDesc, String productColor, Long productPrice, Category category) {
+	public String getProductSummary() {
+		return productSummary;
+	}
+
+	public void setProductSummary(String productSummary) {
+		this.productSummary = productSummary;
+	}
+
+	public LocalDateTime getProductCreatedDate() {
+		return productCreatedDate;
+	}
+
+	public void setProductCreatedDate(LocalDateTime productCreatedDate) {
+		this.productCreatedDate = productCreatedDate;
+	}
+
+	public LocalDateTime getProductUpdatedDate() {
+		return productUpdatedDate;
+	}
+
+	public void setProductUpdatedDate(LocalDateTime productUpdatedDate) {
+		this.productUpdatedDate = productUpdatedDate;
+	}
+
+	public LocalDateTime getProductPublishedDate() {
+		return productPublishedDate;
+	}
+
+	public void setProductPublishedDate(LocalDateTime productPublishedDate) {
+		this.productPublishedDate = productPublishedDate;
+	}
+
+	public Long getSellerId() {
+		return sellerId;
+	}
+
+	public void setSellerId(Long sellerId) {
+		this.sellerId = sellerId;
+	}
+
+	public Long getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Long quantity) {
+		this.quantity = quantity;
+	}
+
+	public BigDecimal getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(BigDecimal discount) {
+		this.discount = discount;
+	}
+
+	public LocalDateTime getSaleStartsDate() {
+		return saleStartsDate;
+	}
+
+	public void setSaleStartsDate(LocalDateTime saleStartsDate) {
+		this.saleStartsDate = saleStartsDate;
+	}
+
+	public LocalDateTime getSalesEndDate() {
+		return salesEndDate;
+	}
+
+	public void setSalesEndDate(LocalDateTime salesEndDate) {
+		this.salesEndDate = salesEndDate;
+	}
+	
+	
+
+	public String getProductBannerImage() {
+		return productBannerImage;
+	}
+
+	public void setProductBannerImage(String productBannerImage) {
+		this.productBannerImage = productBannerImage;
+	}
+	
+	
+
+	public Set<ProductImages> getImages() {
+		return images;
+	}
+
+	public void setImages(Set<ProductImages> images) {
+		this.images = images;
+	}
+
+	public Products(String productTitle, String productDesc, String productSummary, Long productPrice,
+			LocalDateTime productCreatedDate, LocalDateTime productUpdatedDate, LocalDateTime productPublishedDate,
+			Long sellerId, Long quantity, BigDecimal discount, LocalDateTime saleStartsDate, LocalDateTime salesEndDate,
+			Category category,String productBannerImage) {
 		super();
-		this.productName = productName;
+		this.productTitle = productTitle;
 		this.productDesc = productDesc;
-		this.productColor = productColor;
+		this.productSummary = productSummary;
 		this.productPrice = productPrice;
-		this.category = category;
+		this.productCreatedDate = productCreatedDate;
+		this.productUpdatedDate = productUpdatedDate;
+		this.productPublishedDate = productPublishedDate;
+		this.sellerId = sellerId;
+		this.quantity = quantity;
+		this.discount = discount;
+		this.saleStartsDate = saleStartsDate;
+		this.salesEndDate = salesEndDate;
+		//this.category = category;
+		this.productBannerImage=productBannerImage;
 	}
+
+	
 
 
 	

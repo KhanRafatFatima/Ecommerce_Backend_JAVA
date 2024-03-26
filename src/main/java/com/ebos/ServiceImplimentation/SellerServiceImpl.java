@@ -15,12 +15,10 @@ import com.ebos.Response.ApiResponse;
 import com.ebos.Response.DeleteProductAndCategoryResponse;
 import com.ebos.Service.SellerService;
 import com.ebos.repository.CategoryRepository;
-import com.ebos.repository.PaymentTypeRepository;
 import com.ebos.repository.ProductRepository;
 import com.ebos.repository.UserRepository;
 import com.ebos.security.UserPrincipal;
 import com.ebos.tables.Category;
-import com.ebos.tables.PaymentType;
 import com.ebos.tables.Products;
 import com.ebos.tables.User;
 
@@ -36,8 +34,6 @@ public class SellerServiceImpl implements SellerService {
 	@Autowired
 	CategoryRepository categoryRepository;
 	
-	@Autowired
-	PaymentTypeRepository paymentTypeRepository;
 
 	@Override
 	public AddProductResponse addProduct(AddProductRequest addProductRequest) {
@@ -59,12 +55,12 @@ public class SellerServiceImpl implements SellerService {
 		    	        	  Products products=new Products();
 				              Category category=new Category();
 				              Category category2=new Category();
-				                products.setProductName(addProductRequest.getProductName());
-				                products.setProductColor(addProductRequest.getProductColor());
+				                //products.setProductName(addProductRequest.getProductName());
+				                //products.setProductColor(addProductRequest.getProductColor());
 				                products.setProductPrice(addProductRequest.getProductPrice());
 				                products.setProductDesc(addProductRequest.getProductDesc());
 				                // Set category using categoryId from the request
-				                category.setCategoryName(addProductRequest.getCategoryName());
+				                //category.setCategoryName(addProductRequest.getCategoryName());
 				                category.setCategoryType(addProductRequest.getCategoryType());
 				                
 				                
@@ -154,7 +150,7 @@ public class SellerServiceImpl implements SellerService {
 			if(userOptional.isPresent()) {
 				Category category=new Category();
 				
-				category.setCategoryName(addCategoryRequest.getCategoryName());
+				//category.setCategoryName(addCategoryRequest.getCategoryName());
 				category.setCategoryType(addCategoryRequest.getCategoryType());
 				
 				categoryRepository.save(category);
@@ -213,40 +209,40 @@ public class SellerServiceImpl implements SellerService {
 		return deleteCategory;
 	}
 
-	@Override
-	public ApiResponse addpaymentType(AddPaymentTypeRequest addPaymentTypeRequest) {
-	     ApiResponse addPaymentResponse=new ApiResponse();
-	     try {
-	    	 UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	    		// Check if the authenticated user has the "Admin" role
-	         if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
-	    	   Optional<User> userOptional=userRepository.findById(authenticatedUser.getId());
-	    	   if(userOptional.isPresent()) {
-                  PaymentType paymentType=new PaymentType();
-                  
-                   paymentType.setPaymentType(addPaymentTypeRequest.getPaymentType());
-                   
-                   paymentTypeRepository.save(paymentType);
-                   
-                   addPaymentResponse.setMessage("PaymentType Added, Successfully");
-                   addPaymentResponse.setStatus("Success");
-                  
-	    	   }else {
-	    		   addPaymentResponse.setMessage("User is not present");
-	    		   addPaymentResponse.setStatus("False");
-	    	   }
-	        	 
-	         }else {
-	        	 addPaymentResponse.setMessage("Access denied. User does not have the required role.");
-	        	 addPaymentResponse.setStatus("False");
-	         }
-	     }catch(Exception e) {
-	    	 addPaymentResponse.setMessage("Error Occurrred");
-	    	 addPaymentResponse.setStatus("False");
-	     }
-	     
-	     return addPaymentResponse;
-	}
+//	@Override
+//	public ApiResponse addpaymentType(AddPaymentTypeRequest addPaymentTypeRequest) {
+//	     ApiResponse addPaymentResponse=new ApiResponse();
+//	     try {
+//	    	 UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//	    		// Check if the authenticated user has the "Admin" role
+//	         if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
+//	    	   Optional<User> userOptional=userRepository.findById(authenticatedUser.getId());
+//	    	   if(userOptional.isPresent()) {
+//                  PaymentType paymentType=new PaymentType();
+//                  
+//                   paymentType.setPaymentType(addPaymentTypeRequest.getPaymentType());
+//                   
+//                   paymentTypeRepository.save(paymentType);
+//                   
+//                   addPaymentResponse.setMessage("PaymentType Added, Successfully");
+//                   addPaymentResponse.setStatus("Success");
+//                  
+//	    	   }else {
+//	    		   addPaymentResponse.setMessage("User is not present");
+//	    		   addPaymentResponse.setStatus("False");
+//	    	   }
+//	        	 
+//	         }else {
+//	        	 addPaymentResponse.setMessage("Access denied. User does not have the required role.");
+//	        	 addPaymentResponse.setStatus("False");
+//	         }
+//	     }catch(Exception e) {
+//	    	 addPaymentResponse.setMessage("Error Occurrred");
+//	    	 addPaymentResponse.setStatus("False");
+//	     }
+//	     
+//	     return addPaymentResponse;
+//	}
 
 	
 }

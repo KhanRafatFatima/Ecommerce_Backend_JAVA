@@ -73,15 +73,15 @@ public class SellerController {
 	        return new ResponseEntity<>(response, httpStatus);
 	    }
 	 
-		@PostMapping("/addPaymentType")
-	    public ResponseEntity<ApiResponse> addPaymentType(@RequestBody AddPaymentTypeRequest addPaymentTypeRequest) {
-			ApiResponse response =  sellerService.addpaymentType(addPaymentTypeRequest);
-
-	        // Check the status in the response and return the appropriate HTTP status
-	        HttpStatus httpStatus = response.getStatus().equalsIgnoreCase("True") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-
-	        return new ResponseEntity<>(response, httpStatus);
-	    }
+//		@PostMapping("/addPaymentType")
+//	    public ResponseEntity<ApiResponse> addPaymentType(@RequestBody AddPaymentTypeRequest addPaymentTypeRequest) {
+//			ApiResponse response =  sellerService.addpaymentType(addPaymentTypeRequest);
+//
+//	        // Check the status in the response and return the appropriate HTTP status
+//	        HttpStatus httpStatus = response.getStatus().equalsIgnoreCase("True") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+//
+//	        return new ResponseEntity<>(response, httpStatus);
+//	    }
 	 
 	 
 	 
