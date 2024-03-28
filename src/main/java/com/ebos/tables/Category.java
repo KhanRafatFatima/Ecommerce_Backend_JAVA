@@ -12,7 +12,7 @@ public class Category {
 
     private String categoryTitle;
 
-    private String categoryType;
+    private String categoryName;
 
     @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     private Set<Products> products;
@@ -44,15 +44,15 @@ public class Category {
 	}
 
 
-	public String getCategoryType() {
-		return categoryType;
+	
+	public String getCategoryName() {
+		return categoryName;
 	}
 
 
-	public void setCategoryType(String categoryType) {
-		this.categoryType = categoryType;
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
-   
 
 
 	public Set<Products> getProducts() {
@@ -65,10 +65,10 @@ public class Category {
 	}
 
 
-	public Category(String categoryTitle, String categoryType, Set<Products> products) {
+	public Category(String categoryTitle, String categoryName, Set<Products> products) {
 		super();
 		this.categoryTitle = categoryTitle;
-		this.categoryType = categoryType;
+		this.categoryName = categoryName;
 		this.products = products;
 	}
 

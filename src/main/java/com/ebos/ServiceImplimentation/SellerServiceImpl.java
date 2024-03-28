@@ -1,5 +1,6 @@
 package com.ebos.ServiceImplimentation;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.ebos.Request.AddCategoryRequest;
-import com.ebos.Request.AddPaymentTypeRequest;
 import com.ebos.Request.AddProductRequest;
 import com.ebos.Response.AddCategoryResponse;
 import com.ebos.Response.AddProductResponse;
-import com.ebos.Response.ApiResponse;
 import com.ebos.Response.DeleteProductAndCategoryResponse;
 import com.ebos.Service.SellerService;
 import com.ebos.repository.CategoryRepository;
@@ -47,26 +46,26 @@ public class SellerServiceImpl implements SellerService {
 
 		            // Fetch the authenticated user details from the database
 		            Optional<User> userOptional = userRepository.findById(authenticatedUser.getId());
+		            
 
 		            	if(userOptional.isPresent()) {
-		    				Optional<Category> categoryOptional=categoryRepository.findByCategoryType(addProductRequest.getCategoryType());
-		    				//System.out.println("------------>"+categoryOptional);
+		            		
+		              Optional<Category> categoryOptional = categoryRepository.findById(authenticatedUser.getId());	
 		    	          if(categoryOptional.isPresent()) {
 		    	        	  Products products=new Products();
-				              Category category=new Category();
-				              Category category2=new Category();
-				                //products.setProductName(addProductRequest.getProductName());
-				                //products.setProductColor(addProductRequest.getProductColor());
-				                products.setProductPrice(addProductRequest.getProductPrice());
-				                products.setProductDesc(addProductRequest.getProductDesc());
-				                // Set category using categoryId from the request
-				                //category.setCategoryName(addProductRequest.getCategoryName());
-				                category.setCategoryType(addProductRequest.getCategoryType());
-				                
-				                
-				                
-				                //category.setCategoryId(addProductRequest.getCategoryId());
-				                //products.setCategoryType(category2.getCategoryType());
+				              products.setProductTitle(addProductRequest.getProductTitle());
+				              products.setProductDesc(addProductRequest.getProductDesc());
+				              products.setProductSummary(addProductRequest.getProductSummary());
+				              products.setProductPrice(addProductRequest.getProductPrice());
+				              products.setProductCreatedDate(LocalDateTime.now());
+				              products.setProductPublishedDate(LocalDateTime.now());
+				              products.setSellerId(authenticatedUser.getId());
+				              products.setQuantity(addProductRequest.getQuantity());
+				              products.setDiscount(addProductRequest.getDiscount());
+				              if(products.isSales()) {
+				              products.setSaleStartsDate(addProductRequest.getSaleStartsDate());
+				              products.setSalesEndDate(addProductRequest.getSalesEndDate());
+				              }
 				                
 				                productRepository.save(products);
 				                addProductResponse.setMessage("Product Added Successfully!");
@@ -98,6 +97,8 @@ public class SellerServiceImpl implements SellerService {
 	    
 		return addProductResponse;
 	}
+	
+	
 	
 	@Override
 	public DeleteProductAndCategoryResponse deleteProduct(Long id) {
@@ -150,8 +151,8 @@ public class SellerServiceImpl implements SellerService {
 			if(userOptional.isPresent()) {
 				Category category=new Category();
 				
-				//category.setCategoryName(addCategoryRequest.getCategoryName());
-				category.setCategoryType(addCategoryRequest.getCategoryType());
+				category.setCategoryTitle(addCategoryRequest.getCategoryTitle());
+				category.setCategoryName(addCategoryRequest.getCategoryName());
 				
 				categoryRepository.save(category);
 				
@@ -208,7 +209,7 @@ public class SellerServiceImpl implements SellerService {
 		
 		return deleteCategory;
 	}
-
+}
 //	@Override
 //	public ApiResponse addpaymentType(AddPaymentTypeRequest addPaymentTypeRequest) {
 //	     ApiResponse addPaymentResponse=new ApiResponse();
@@ -245,4 +246,4 @@ public class SellerServiceImpl implements SellerService {
 //	}
 
 	
-}
+

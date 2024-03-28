@@ -1,7 +1,6 @@
-	package com.ebos.tables;
+package com.ebos.tables;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -38,13 +37,20 @@ public class Transaction {
     	
     }
 
+	
+	
+
 	public Long getId() {
 		return id;
 	}
 
+
+
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 
 
 
@@ -136,11 +142,6 @@ public class Transaction {
 		this.status = status;
 		this.user = user;
 		this.orderDetails = orderDetails;
-	}
-
-	public void setUser(Long id2) {
-		id=id2;
-		
 	}
 
 	

@@ -9,14 +9,12 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails.Address;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.ebos.Request.UserAddressRequest;
 import com.ebos.Request.UserOrderProductRequest;
 import com.ebos.Response.ApiResponse;
-import com.ebos.Response.GetUserDataResponse;
 import com.ebos.Service.BuyerService;
 import com.ebos.repository.Order_DetailsRepository;
 import com.ebos.repository.PaymentRepository;
@@ -74,7 +72,7 @@ public class BuyerServiceImpl implements BuyerService{
 				 tempMap.put("Profile",user.getProfile());
 				 tempMap.put("Intro", user.getIntro());
 			        }
-				 
+
 				 list.add(tempMap);
 				 
 				 map.put("UserData", list);
@@ -134,7 +132,41 @@ public class BuyerServiceImpl implements BuyerService{
 	    return apiResponse;
 	}
 
-	
+	@Override
+	public Map<String, Object> getAllProducts() {
+		Map<String, Object> map=new HashMap<>();
+		List<Map<String, Object>> list=new ArrayList<>();
+		try {
+			Map<String, Object> tempMap=new HashMap<>();
+			Products products=new Products();
+			
+			tempMap.put("Title",products.getProductTitle());
+			tempMap.put("Price", products.getProductPrice());
+			tempMap.put("Quantity",products.getQuantity());
+			tempMap.put("Description", products.getProductDesc());
+			tempMap.put("CreatedDate", products.getProductCreatedDate());
+			tempMap.put("PublishedDate", products.getProductPublishedDate());
+			tempMap.put("Image", products.getProductBannerImage());
+			tempMap.put("Summmary", products.getProductSummary());
+			if(products.isSales()) {
+			tempMap.put("", products.getSaleStartsDate());
+			tempMap.put("", products.getSalesEndDate());
+			}
+			tempMap.put("Reviews", products.getReviews());
+			list.add(tempMap);
+			 
+			 map.put("ProductData", list);
+			 map.put("message", "success");
+	         map.put("status", true);
+
+	    } catch (Exception e) {
+	        map.put("records", list);
+	        map.put("message", "Error retrieving product data");
+	        map.put("status", false);
+	    }
+	 
+	 return map;
+	}
 
 	 @Override
 	    public ApiResponse addPayment(UserOrderProductRequest userOrderProductRequest) {
@@ -230,12 +262,6 @@ public class BuyerServiceImpl implements BuyerService{
 	        }
 	        return apiResponse;
 	    }
-
-
-
-
-
-		
 
 
 

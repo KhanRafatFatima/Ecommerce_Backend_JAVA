@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class Cart {
+	//
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

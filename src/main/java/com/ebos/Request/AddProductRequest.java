@@ -15,8 +15,6 @@ public class AddProductRequest {
     
     private LocalDateTime productCreatedDate;
     
-    private LocalDateTime productUpdatedDate;
-    
     private LocalDateTime productPublishedDate;
     
     private Long sellerId;
@@ -77,13 +75,6 @@ public class AddProductRequest {
 		this.productCreatedDate = productCreatedDate;
 	}
 
-	public LocalDateTime getProductUpdatedDate() {
-		return productUpdatedDate;
-	}
-
-	public void setProductUpdatedDate(LocalDateTime productUpdatedDate) {
-		this.productUpdatedDate = productUpdatedDate;
-	}
 
 	public LocalDateTime getProductPublishedDate() {
 		return productPublishedDate;
@@ -159,7 +150,6 @@ public class AddProductRequest {
 		this.productSummary = productSummary;
 		this.productPrice = productPrice;
 		this.productCreatedDate = productCreatedDate;
-		this.productUpdatedDate = productUpdatedDate;
 		this.productPublishedDate = productPublishedDate;
 		this.sellerId = sellerId;
 		this.quantity = quantity;

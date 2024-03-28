@@ -39,6 +39,8 @@ public class Products {
     
     private LocalDateTime salesEndDate;
     
+    private boolean sales;
+    
     private String productBannerImage;
     
     @ManyToMany
@@ -191,6 +193,38 @@ public class Products {
 	
 	
 
+	public boolean isSales() {
+		return sales;
+	}
+
+	public void setSales(boolean sales) {
+		this.sales = sales;
+	}
+
+	public Set<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Set<Category> categories) {
+		this.categories = categories;
+	}
+
+	public Set<ProductReview> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(Set<ProductReview> reviews) {
+		this.reviews = reviews;
+	}
+
+	public Set<OrderDetails> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Set<OrderDetails> orders) {
+		this.orders = orders;
+	}
+
 	public Set<ProductImages> getImages() {
 		return images;
 	}
@@ -202,7 +236,7 @@ public class Products {
 	public Products(String productTitle, String productDesc, String productSummary, Long productPrice,
 			LocalDateTime productCreatedDate, LocalDateTime productUpdatedDate, LocalDateTime productPublishedDate,
 			Long sellerId, Long quantity, BigDecimal discount, LocalDateTime saleStartsDate, LocalDateTime salesEndDate,
-			Category category,String productBannerImage) {
+			Category category,String productBannerImage,boolean sales) {
 		super();
 		this.productTitle = productTitle;
 		this.productDesc = productDesc;
@@ -218,6 +252,7 @@ public class Products {
 		this.salesEndDate = salesEndDate;
 		//this.category = category;
 		this.productBannerImage=productBannerImage;
+		this.sales=sales;
 	}
 
 	

@@ -12,7 +12,11 @@ public class OrderDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
     
+    private String status;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @OneToOne
     @JoinColumn(name = "Address_id")
@@ -36,6 +40,63 @@ public class OrderDetails {
 
     
     
+    
+	public String getStatus() {
+		return status;
+	}
+
+
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
+
+
+	public Transaction getTransaction() {
+		return transaction;
+	}
+
+
+
+
+	public void setTransaction(Transaction transaction) {
+		this.transaction = transaction;
+	}
+
+
+
+
+	public Set<Products> getProducts() {
+		return products;
+	}
+
+
+
+
+	public void setProducts(Set<Products> products) {
+		this.products = products;
+	}
+
+
+
+
 	public OrderDetails(Long orderId, UserAddress userAddress, Transaction transaction,
 			LocalDateTime orderdDateTime) {
 		super();
