@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.ebos.repository.Order_DetailsRepository;
@@ -46,7 +48,7 @@ public class Products {
     @ManyToMany
     @JoinTable(name="product_category",joinColumns = @JoinColumn(name="product_id"),
                                        inverseJoinColumns =@JoinColumn(name="category_id"))
-    private Set<Category> categories;
+    private Set<Category> categories=new HashSet<>();
     
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ProductImages> images;
@@ -236,7 +238,7 @@ public class Products {
 	public Products(String productTitle, String productDesc, String productSummary, Long productPrice,
 			LocalDateTime productCreatedDate, LocalDateTime productUpdatedDate, LocalDateTime productPublishedDate,
 			Long sellerId, Long quantity, BigDecimal discount, LocalDateTime saleStartsDate, LocalDateTime salesEndDate,
-			Category category,String productBannerImage,boolean sales) {
+			Set<Category> categories,String productBannerImage,boolean sales) {
 		super();
 		this.productTitle = productTitle;
 		this.productDesc = productDesc;
@@ -250,7 +252,7 @@ public class Products {
 		this.discount = discount;
 		this.saleStartsDate = saleStartsDate;
 		this.salesEndDate = salesEndDate;
-		//this.category = category;
+		this.categories = categories;
 		this.productBannerImage=productBannerImage;
 		this.sales=sales;
 	}

@@ -31,7 +31,7 @@ public class UserServiceImpls implements UserService {
 		List<User> list = userRepository.findAll();
 		setListResponse.setMessage("Success");
 		setListResponse.setStatus("True");
-		setListResponse.setList(list);
+		
 		
 		return setListResponse;
 	}

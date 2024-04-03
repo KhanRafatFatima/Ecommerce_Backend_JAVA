@@ -6,6 +6,7 @@ import com.ebos.Request.UserAddressRequest;
 import com.ebos.Request.UserOrderProductRequest;
 import com.ebos.Response.ApiResponse;
 import com.ebos.Response.GetUserDataResponse;
+import com.ebos.Response.SetListResponse;
 
 public interface BuyerService {
 	 
@@ -19,7 +20,8 @@ public interface BuyerService {
     
     public Map<String, Object> getUserData(); 
     
-    public Map<String, Object> getAllProducts();
+    public Map<String,Object> findAllProducts();
 	
+    public Map<String,Object> getSpecificProduct(String categoryName);
 
 }

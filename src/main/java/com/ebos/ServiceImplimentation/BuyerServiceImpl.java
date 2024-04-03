@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+
 import com.ebos.Request.UserAddressRequest;
 import com.ebos.Request.UserOrderProductRequest;
 import com.ebos.Response.ApiResponse;
+import com.ebos.Response.SetListResponse;
 import com.ebos.Service.BuyerService;
 import com.ebos.repository.Order_DetailsRepository;
 import com.ebos.repository.PaymentRepository;
@@ -22,6 +24,7 @@ import com.ebos.repository.ProductRepository;
 import com.ebos.repository.UserAddressRepository;
 import com.ebos.repository.UserRepository;
 import com.ebos.security.UserPrincipal;
+import com.ebos.tables.Category;
 import com.ebos.tables.OrderDetails;
 import com.ebos.tables.Transaction;
 import com.ebos.tables.Products;
@@ -94,6 +97,57 @@ public class BuyerServiceImpl implements BuyerService{
 		 return map;
 	}
 	
+
+	@Override
+	public Map<String,Object> findAllProducts() {
+		Map<String,Object> map=new HashMap<>();
+		try {
+		List<Products> list=productRepository.findAll();
+		
+		map.put("List", list);
+		map.put("status", true);
+		map.put("message", "Successfully fetched the data");
+		}catch (Exception e) {
+			map.put("status", false);
+			map.put("message", "error occured");
+		}
+		return map;
+	}
+	
+	@Override
+	public Map<String, Object> getSpecificProduct(String categoryName) {
+	   Map<String,Object> map=new HashMap<>();
+//	   try {
+//		   Optional<Category> categoryOptional=productRepository.findByCategoryName(categoryName);
+//		   if(categoryOptional.isPresent()) {   
+//			   Category category=categoryOptional.get();
+//			   
+//			// Assuming you have a method in the ProductRepository to find products by category
+//	            List<Products> products = productRepository.findByCategory(category);
+//	            
+//	            if (!products.isEmpty()) {
+//	                map.put("status", true);
+//	                map.put("message", "Products found for category: " + categoryName);
+//	                map.put("products", products);
+//	            } else {
+//	                map.put("status", false);
+//	                map.put("message", "No products found for category: " + categoryName);
+//	            }
+//	           
+//			      }else {
+//			    	map.put("status", false);
+//			        map.put("message", "Category not found");
+//		   }
+//		   
+//	   }catch(Exception e){
+//		   	map.put("status", false);
+//			map.put("message", "error occured");
+//	   }
+	   
+	   return map;
+	}
+
+	
 	@Override
 	public ApiResponse userAddAddress(UserAddressRequest userAddressRequest) {
 	    ApiResponse apiResponse = new ApiResponse();
@@ -131,42 +185,7 @@ public class BuyerServiceImpl implements BuyerService{
 
 	    return apiResponse;
 	}
-
-	@Override
-	public Map<String, Object> getAllProducts() {
-		Map<String, Object> map=new HashMap<>();
-		List<Map<String, Object>> list=new ArrayList<>();
-		try {
-			Map<String, Object> tempMap=new HashMap<>();
-			Products products=new Products();
-			
-			tempMap.put("Title",products.getProductTitle());
-			tempMap.put("Price", products.getProductPrice());
-			tempMap.put("Quantity",products.getQuantity());
-			tempMap.put("Description", products.getProductDesc());
-			tempMap.put("CreatedDate", products.getProductCreatedDate());
-			tempMap.put("PublishedDate", products.getProductPublishedDate());
-			tempMap.put("Image", products.getProductBannerImage());
-			tempMap.put("Summmary", products.getProductSummary());
-			if(products.isSales()) {
-			tempMap.put("", products.getSaleStartsDate());
-			tempMap.put("", products.getSalesEndDate());
-			}
-			tempMap.put("Reviews", products.getReviews());
-			list.add(tempMap);
-			 
-			 map.put("ProductData", list);
-			 map.put("message", "success");
-	         map.put("status", true);
-
-	    } catch (Exception e) {
-	        map.put("records", list);
-	        map.put("message", "Error retrieving product data");
-	        map.put("status", false);
-	    }
-	 
-	 return map;
-	}
+	
 
 	 @Override
 	    public ApiResponse addPayment(UserOrderProductRequest userOrderProductRequest) {
@@ -263,6 +282,8 @@ public class BuyerServiceImpl implements BuyerService{
 	        return apiResponse;
 	    }
 
+
+		
 
 
 }

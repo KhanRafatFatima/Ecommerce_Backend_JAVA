@@ -2,6 +2,7 @@ package com.ebos.Response;
 
 import java.util.List;
 
+import com.ebos.tables.Products;
 import com.ebos.tables.User;
 
 
@@ -9,7 +10,8 @@ import com.ebos.tables.User;
 public class SetListResponse {
 	private String message;
 	private String status;
-	List<User> list;
+	List<Products> list;
+	List<User> list2;
 	public String getMessage() {
 		return message;
 	}
@@ -22,12 +24,18 @@ public class SetListResponse {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public List<User> getList() {
+	public List<Products> getList() {
 		return list;
 	}
-	public void setList(List<User> list) {
+	public void setList(List<Products> list) {
 		this.list = list;
 	}
+	public List<User> getList2() {
+		return list2;
+	}
+	public void setList2(List<User> list2) {
+		this.list2 = list2;
+	}
 	
-
+   
 }

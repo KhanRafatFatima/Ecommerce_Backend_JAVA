@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ebos.Request.AddProductRequest;
 import com.ebos.Request.UserAddressRequest;
 import com.ebos.Request.UserOrderProductRequest;
-import com.ebos.Response.AddProductResponse;
 import com.ebos.Response.ApiResponse;
 import com.ebos.Response.GetUserDataResponse;
+import com.ebos.Response.SetListResponse;
 import com.ebos.Service.BuyerService;
 
 @RestController
@@ -36,6 +36,22 @@ public class BuyerController {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	        }
 	    }
+	 
+	 @GetMapping("/getProducts")
+	    public ResponseEntity<?> getProducts(){ 
+			Map<String,Object> productData=buyerService.findAllProducts();
+			 return ResponseEntity.ok(productData);
+		
+	 }
+	 
+//	 @GetMapping("/getProducts/{categoryName}")
+//	    public ResponseEntity<?> getSpecificProducts(@RequestBody String categoryName){ 
+//			Map<String,Object> productData=buyerService.getSpecificProduct(categoryName);
+//			 return ResponseEntity.ok(productData);
+//		
+//	 }
+	 
+	 
 	
 	 @PostMapping("/addPayment")
 	    public ResponseEntity<ApiResponse> addPayment(@RequestBody UserOrderProductRequest addPaymentRequest) {

@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 
 public class AddProductRequest {
 	
+	private Long id;  //for update
+	
 	private String productTitle;
 
     private String productDesc;
@@ -30,6 +32,8 @@ public class AddProductRequest {
 	private String categoryName;
 	
 	private String categoryType;
+	
+	private boolean sales;
 	
 	public AddProductRequest() {
 		
@@ -138,6 +142,26 @@ public class AddProductRequest {
 
 	public void setCategoryType(String categoryType) {
 		this.categoryType = categoryType;
+	}
+	
+	
+
+	public boolean isSales() {
+		return sales;
+	}
+
+	public void setSales(boolean sales) {
+		this.sales = sales;
+	}
+	
+	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public AddProductRequest(String productTitle, String productDesc, String productSummary, Long productPrice,

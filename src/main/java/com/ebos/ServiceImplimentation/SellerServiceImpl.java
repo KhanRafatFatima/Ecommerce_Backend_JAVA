@@ -1,6 +1,8 @@
 package com.ebos.ServiceImplimentation;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.ebos.Request.AddCategoryRequest;
 import com.ebos.Request.AddProductRequest;
 import com.ebos.Response.AddCategoryResponse;
-import com.ebos.Response.AddProductResponse;
 import com.ebos.Response.DeleteProductAndCategoryResponse;
 import com.ebos.Service.SellerService;
 import com.ebos.repository.CategoryRepository;
@@ -33,72 +34,123 @@ public class SellerServiceImpl implements SellerService {
 	@Autowired
 	CategoryRepository categoryRepository;
 	
-
+	
 	@Override
-	public AddProductResponse addProduct(AddProductRequest addProductRequest) {
-	    AddProductResponse addProductResponse=new AddProductResponse();
-	    
+	public Map<String, Object> addProducts(AddProductRequest addProductRequest) {
+	    Map<String, Object> map = new HashMap<>();
 	    try {
-	    	  UserPrincipal authenticatedUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	        UserPrincipal authenticatedUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		        // Check if the authenticated user has the "seller" role
-		        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
+	        // Check if the authenticated user has the "SELLER" role
+	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
 
-		            // Fetch the authenticated user details from the database
-		            Optional<User> userOptional = userRepository.findById(authenticatedUser.getId());
-		            
+	            // Create a new product instance
+	            Products product = new Products();
+	            product.setProductTitle(addProductRequest.getProductTitle());
+	            product.setProductDesc(addProductRequest.getProductDesc());
+	            product.setProductSummary(addProductRequest.getProductSummary());
+	            product.setProductPrice(addProductRequest.getProductPrice());
+	            product.setProductCreatedDate(LocalDateTime.now());
+	            product.setProductPublishedDate(LocalDateTime.now());
+	            product.setSellerId(authenticatedUser.getId());
+	            product.setQuantity(addProductRequest.getQuantity());
+	            product.setDiscount(addProductRequest.getDiscount());
+	            product.setSales(addProductRequest.isSales());
+	            if (product.isSales()) {
+	                product.setSaleStartsDate(addProductRequest.getSaleStartsDate());
+	                product.setSalesEndDate(addProductRequest.getSalesEndDate());
+	            }
 
-		            	if(userOptional.isPresent()) {
-		            		
-		              Optional<Category> categoryOptional = categoryRepository.findById(authenticatedUser.getId());	
-		    	          if(categoryOptional.isPresent()) {
-		    	        	  Products products=new Products();
-				              products.setProductTitle(addProductRequest.getProductTitle());
-				              products.setProductDesc(addProductRequest.getProductDesc());
-				              products.setProductSummary(addProductRequest.getProductSummary());
-				              products.setProductPrice(addProductRequest.getProductPrice());
-				              products.setProductCreatedDate(LocalDateTime.now());
-				              products.setProductPublishedDate(LocalDateTime.now());
-				              products.setSellerId(authenticatedUser.getId());
-				              products.setQuantity(addProductRequest.getQuantity());
-				              products.setDiscount(addProductRequest.getDiscount());
-				              if(products.isSales()) {
-				              products.setSaleStartsDate(addProductRequest.getSaleStartsDate());
-				              products.setSalesEndDate(addProductRequest.getSalesEndDate());
-				              }
-				                
-				                productRepository.save(products);
-				                addProductResponse.setMessage("Product Added Successfully!");
-					        	addProductResponse.setStatus("True");
-		    	          }else {
-		    	        	    addProductResponse.setMessage("Categorytype is not present");
-					        	addProductResponse.setStatus("false");
-		    	          }
-		                
-		                 addProductResponse.setMessage("Product Added Successfully!");
-			        	addProductResponse.setStatus("True");
-		            
-		            }else {
-		            	addProductResponse.setMessage("User is not present");
-			        	addProductResponse.setStatus("False");
-		            	
-		            }
-	    	
-	    }else {
-		        	addProductResponse.setMessage("Access denied. User does not have the required role.");
-		        	addProductResponse.setStatus("False");
-		        }
-		        }catch(Exception e) {
-		        	System.out.print("----------->" +e);
-		        	addProductResponse.setMessage("Error Occurrred");
-		        	addProductResponse.setStatus("False");
-	    	
+	            // Save the product to the database
+	            Products savedProduct = productRepository.save(product);
+
+	            // Fetch the category by name
+	            Optional<Category> categoryOptional = categoryRepository.findByCategoryName(addProductRequest.getCategoryName());
+	            if (categoryOptional.isPresent()) {
+	                Category category = categoryOptional.get();
+
+	                // Map the relationship between the product and the category
+	                savedProduct.getCategories().add(category);
+	                category.getProducts().add(savedProduct);
+
+	                productRepository.save(savedProduct);
+	                categoryRepository.save(category);
+
+	                map.put("status", true);
+	                map.put("message", "Product added successfully");
+	            } else {
+	                map.put("status", false);
+	                map.put("message", "Category not found");
+	            }
+	        } else {
+	            map.put("status", false);
+	            map.put("message", "Access denied. User does not have the required role.");
+	        }
+	    } catch (Exception e) {
+	        map.put("status", false);
+	        map.put("message", "Error occurred: " + e.getMessage());
 	    }
-	    
-		return addProductResponse;
+
+	    return map;
 	}
+
 	
 	
+	@Override
+	public Map<String, Object> updateProduct(AddProductRequest updateProductRequest,Long id) {
+		Map<String,Object> map=new HashMap<>();
+		try {
+			UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			  // Check if the authenticated user has the "Admin" role
+	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
+			
+	        
+			Optional<Products> productOptional=productRepository.findById(id);
+			
+			if(productOptional.isPresent()) {
+				Products products=productOptional.get();
+				
+				  products.setProductTitle(updateProductRequest.getProductTitle());
+	              products.setProductDesc(updateProductRequest.getProductDesc());
+	              products.setProductSummary(updateProductRequest.getProductSummary());
+	              products.setProductPrice(updateProductRequest.getProductPrice());
+	              products.setProductCreatedDate(LocalDateTime.now());
+	              products.setProductPublishedDate(LocalDateTime.now());
+	              products.setSellerId(authenticatedUser.getId());
+	              products.setQuantity(updateProductRequest.getQuantity());
+	              products.setDiscount(updateProductRequest.getDiscount());
+	              products.setSales(updateProductRequest.isSales());
+	              if(products.isSales()) {
+	              products.setSaleStartsDate(updateProductRequest.getSaleStartsDate());
+	              products.setSalesEndDate(updateProductRequest.getSalesEndDate());
+	              }
+	              
+	              productRepository.save(products);
+	              
+	              map.put("status", true);
+	              map.put("message", "product updated Successfully");
+				
+				
+			}else {
+				map.put("status", false);
+				map.put("message","product not found" );
+			}
+			
+			
+	        }else {
+	        	map.put("status", false);
+				map.put("message","user doesnt have required Role" );
+	        }
+			
+			
+		}catch(Exception e) {
+			map.put("status", false);
+			map.put("message","Error occured" );
+		}
+		
+		return map;
+	}
 	
 	@Override
 	public DeleteProductAndCategoryResponse deleteProduct(Long id) {
@@ -136,6 +188,8 @@ public class SellerServiceImpl implements SellerService {
 		return deleteProductAndCategoryResponse;
 		
 	}
+	
+	
 
 	@Override
 	public AddCategoryResponse addCategory(AddCategoryRequest addCategoryRequest) {
@@ -209,6 +263,12 @@ public class SellerServiceImpl implements SellerService {
 		
 		return deleteCategory;
 	}
+
+	
+
+
+
+	
 }
 //	@Override
 //	public ApiResponse addpaymentType(AddPaymentTypeRequest addPaymentTypeRequest) {
