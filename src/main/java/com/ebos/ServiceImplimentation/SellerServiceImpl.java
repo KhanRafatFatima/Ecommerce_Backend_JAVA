@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.ebos.Request.AddCategoryRequest;
 import com.ebos.Request.AddProductRequest;
-import com.ebos.Response.AddCategoryResponse;
-import com.ebos.Response.DeleteProductAndCategoryResponse;
 import com.ebos.Service.SellerService;
 import com.ebos.repository.CategoryRepository;
 import com.ebos.repository.ProductRepository;
@@ -41,8 +39,8 @@ public class SellerServiceImpl implements SellerService {
 	    try {
 	        UserPrincipal authenticatedUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-	        // Check if the authenticated user has the "SELLER" role
-	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
+//	        // Check if the authenticated user has the "SELLER" role
+//	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
 
 	            // Create a new product instance
 	            Products product = new Products();
@@ -82,12 +80,13 @@ public class SellerServiceImpl implements SellerService {
 	                map.put("status", false);
 	                map.put("message", "Category not found");
 	            }
-	        } else {
-	            map.put("status", false);
-	            map.put("message", "Access denied. User does not have the required role.");
-	        }
+//	        } else {
+//	            map.put("status", false);
+//	            map.put("message", "Access denied. User does not have the required role.");
+//	        }
 	    } catch (Exception e) {
 	        map.put("status", false);
+	        System.out.println("-------------->" +e);
 	        map.put("message", "Error occurred: " + e.getMessage());
 	    }
 
@@ -140,7 +139,7 @@ public class SellerServiceImpl implements SellerService {
 			
 	        }else {
 	        	map.put("status", false);
-				map.put("message","user doesnt have required Role" );
+				map.put("message","user doesn't have required Role" );
 	        }
 			
 			
@@ -153,8 +152,8 @@ public class SellerServiceImpl implements SellerService {
 	}
 	
 	@Override
-	public DeleteProductAndCategoryResponse deleteProduct(Long id) {
-		DeleteProductAndCategoryResponse deleteProductAndCategoryResponse=new DeleteProductAndCategoryResponse();
+	public Map<String,Object> deleteProduct(Long id) {
+		Map<String,Object> map=new HashMap<>();
 		try {
 			UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
@@ -169,31 +168,31 @@ public class SellerServiceImpl implements SellerService {
 				
 				productRepository.delete(products);
 				
-				deleteProductAndCategoryResponse.setMessage("Deleted the product, Successfully!");
-				deleteProductAndCategoryResponse.setStatus("True");
+					map.put("status", true);
+					map.put("message", "product deleted Successfully");
 			
 			}else {
-				deleteProductAndCategoryResponse.setMessage("Product with this id is not present");
-				deleteProductAndCategoryResponse.setStatus("False");
+				map.put("status", false);
+				map.put("message","product not found" );
 			}
 	       }else {
-	    	   deleteProductAndCategoryResponse.setMessage("Access denied. User does not have the required role.");
-	    	   deleteProductAndCategoryResponse.setStatus("False"); 
+	    	    map.put("status", false);
+				map.put("message","user doesnt have required Role" );
 	       }
 		}catch(Exception e) {
-			deleteProductAndCategoryResponse.setMessage("Error Occurrred");
-			deleteProductAndCategoryResponse.setStatus("False");
+			map.put("status", false);
+			map.put("message","Error occured" );
 	    	   
 	       }
-		return deleteProductAndCategoryResponse;
+		return map;
 		
 	}
 	
 	
 
 	@Override
-	public AddCategoryResponse addCategory(AddCategoryRequest addCategoryRequest) {
-		AddCategoryResponse addCategoryResponse=new AddCategoryResponse();	
+	public Map<String,Object>  addCategory(AddCategoryRequest addCategoryRequest) {
+		Map<String,Object> map=new HashMap<>();
 		try {
 			UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
@@ -210,29 +209,67 @@ public class SellerServiceImpl implements SellerService {
 				
 				categoryRepository.save(category);
 				
-				addCategoryResponse.setMessage("Category Added Successfully!");
-				addCategoryResponse.setStatus("True");
+				map.put("status", true);
+				map.put("message", "category added successfully");
 				
 			}else {
-				addCategoryResponse.setMessage("User is not present");
-				addCategoryResponse.setStatus("False");
+				map.put("status", false);
+				map.put("message", "User not found");
 			}
 	       }else {
-	    	   addCategoryResponse.setMessage("Access denied. User does not have the required role.");
-	    	   addCategoryResponse.setStatus("False");
+	    	   	map.put("status", false);
+				map.put("message", "Access denied. User does not have the required role.");
 	       }
 			
 		}catch(Exception e) {
-			addCategoryResponse.setMessage("Error Occurrred");
-			addCategoryResponse.setStatus("False");
+			map.put("status", false);
+			map.put("message", "Error Occured");
 		}
 		
-		return addCategoryResponse;
+		return map;
 		}
+	
+	@Override
+	public Map<String, Object> updateCategory(AddCategoryRequest addCategoryRequest,Long id) {
+		Map<String,Object> map=new HashMap<>();
+		try {
+			UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			  // Check if the authenticated user has the "Admin" role
+	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
+	        	Optional<Category> categoryOptional=categoryRepository.findById(id);
+	        	
+	        	if(categoryOptional.isPresent()) {
+	             Category category=categoryOptional.get();
+	             
+	             	category.setCategoryTitle(addCategoryRequest.getCategoryTitle());
+					category.setCategoryName(addCategoryRequest.getCategoryName());
+					
+					categoryRepository.save(category);
+					
+					map.put("status", true);
+					map.put("message", "category updated successfully");
+	             
+	        	}else {
+	        		map.put("status", false);
+					map.put("message", "User not found");
+				}
+		       }else {
+		    	   	map.put("status", false);
+					map.put("message", "Access denied. User does not have the required role.");
+		       }
+				
+			}catch(Exception e) {
+				map.put("status", false);
+				map.put("message", "Error Occured");
+			}
+		
+		return map;
+	}
 
 	@Override
-	public DeleteProductAndCategoryResponse deleteCategory(Long id) {
-		DeleteProductAndCategoryResponse deleteCategory= new DeleteProductAndCategoryResponse();
+	 public Map<String,Object> deleteCategory(Long id) {
+		Map<String,Object> map=new HashMap<>();
 		try {
 		UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		 
@@ -245,24 +282,29 @@ public class SellerServiceImpl implements SellerService {
              
              categoryRepository.delete(category);
              
-             deleteCategory.setMessage("Deleted the category, Successfully");
-     		 deleteCategory.setStatus("Success");	
+             	map.put("status", true);
+				map.put("message", "category deleted successfully");
+             
         	}else {
-        		deleteCategory.setMessage("Category with this id is not present");
-        		deleteCategory.setStatus("False");
-        	}
-        	
-        }else{
-        	deleteCategory.setMessage("Access denied. User does not have the required role.");
-        	deleteCategory.setStatus("False");
+        		map.put("status", false);
+				map.put("message", "Category not found");
+			}
+	       }else {
+	    	   	map.put("status", false);
+				map.put("message", "Access denied. User does not have the required role.");
+	       
         	}
 	 }catch(Exception e) {
-		deleteCategory.setMessage("Error Occurrred");
-		deleteCategory.setStatus("False");
+		 	map.put("status", false);
+			map.put("message", "Error Occured");
 	 }
 		
-		return deleteCategory;
+		return map;
 	}
+
+
+
+	
 
 	
 

@@ -16,6 +16,9 @@ public interface ProductRepository extends JpaRepository<Products, Long> {
     // Add custom queries if needed
     Optional<Long> findProductPriceByProductId(Long productId);
 
+
+	List<Products> findByProductTitle(String productTitle);
+
     //Optional<Category> findByCategoryName(String categoryName);
 //
 //	List<Products> findByCategory(Category category);

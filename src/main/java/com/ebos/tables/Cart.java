@@ -1,16 +1,18 @@
 package com.ebos.tables;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 
 @Entity
 public class Cart {
-	//
+	
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -18,9 +20,11 @@ public class Cart {
     @JoinColumn(name = "product_id")
     private Products products;
 
-    private Long quantity;
+    private String quantity;
 
-    // Constructors, getters, and setters...
+    private LocalDateTime createddate;
+    
+    private LocalDateTime modifieddate;
 	
 	public Cart() {
 	
@@ -52,19 +56,39 @@ public class Cart {
 		this.products = products;
 	}
 
-	public Long getQuantity() {
+	public String getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Long quantity) {
+	public void setQuantity(String quantity) {
 		this.quantity = quantity;
 	}
-
 	
-	public Cart(User user, Products products, Long quantity) {
+	
+	public LocalDateTime getCreateddate() {
+		return createddate;
+	}
+
+	public void setCreateddate(LocalDateTime createddate) {
+		this.createddate = createddate;
+	}
+
+	public LocalDateTime getModifieddate() {
+		return modifieddate;
+	}
+
+	public void setModifieddate(LocalDateTime modifieddate) {
+		this.modifieddate = modifieddate;
+	}
+
+	public Cart(User user, Products products, String quantity, LocalDateTime createddate, LocalDateTime modifieddate) {
 		super();
 		this.user = user;
 		this.products = products;
 		this.quantity = quantity;
+		this.createddate = createddate;
+		this.modifieddate = modifieddate;
 	}
+
+	
 }

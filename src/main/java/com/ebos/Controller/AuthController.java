@@ -84,16 +84,16 @@ public class AuthController {
         }
 
         User user = new User(
-            signUpRequest.getFirstname(),  // Firstname
-            signUpRequest.getMiddlename(), // Middlename
-            signUpRequest.getLastname(),   // Lastname
-            signUpRequest.getUsername(),   // Username
-            signUpRequest.getMobileNo(),   // Mobile number
-            signUpRequest.getEmail(),      // Email
-            signUpRequest.getPassword(),   // Password
-            LocalDateTime.now(),               // Registered date (assuming it's set to the current date)
-            signUpRequest.getIntro(),      // Intro
-            signUpRequest.getProfile()     // Profile
+            signUpRequest.getFirstname(), 
+            signUpRequest.getMiddlename(), 
+            signUpRequest.getLastname(),   
+            signUpRequest.getUsername(),   
+            signUpRequest.getMobileNo(),   
+            signUpRequest.getEmail(),     
+            signUpRequest.getPassword(),   
+            LocalDateTime.now(),  
+            signUpRequest.getIntro(),      
+            signUpRequest.getProfile()     
         );
 
 

@@ -15,11 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ebos.Request.AddCategoryRequest;
-import com.ebos.Request.AddPaymentTypeRequest;
 import com.ebos.Request.AddProductRequest;
-import com.ebos.Response.AddCategoryResponse;
-import com.ebos.Response.ApiResponse;
-import com.ebos.Response.DeleteProductAndCategoryResponse;
 import com.ebos.Response.DeleteResponse;
 import com.ebos.Response.SetListResponse;
 import com.ebos.Service.SellerService;
@@ -50,33 +46,34 @@ public class SellerController {
 	}
 	
 	@PostMapping("/addCategory")
-    public ResponseEntity<AddCategoryResponse> addCategory(@RequestBody AddCategoryRequest addCategoryRequest) {
-		AddCategoryResponse response =  sellerService.addCategory(addCategoryRequest);
+    public ResponseEntity<Map<String,Object>> addCategory(@RequestBody AddCategoryRequest addCategoryRequest) {
+		Map<String,Object>response =  sellerService.addCategory(addCategoryRequest);
 
-        // Check the status in the response and return the appropriate HTTP status
-        HttpStatus httpStatus = response.getStatus().equalsIgnoreCase("True") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-
-        return new ResponseEntity<>(response, httpStatus);
+		return ResponseEntity.ok(response);
     }
 	
+	@PostMapping("/updateCategory/{id}")
+    public ResponseEntity<Map<String,Object>> updateCategory(@RequestBody AddCategoryRequest addCategoryRequest,@PathVariable Long id) {
+		Map<String,Object> response =  sellerService.updateCategory(addCategoryRequest,id);
+
+		return ResponseEntity.ok(response);
+    }
+	
+	
+	
 	 @DeleteMapping("/deleteProduct/{id}")
-	    public ResponseEntity<DeleteProductAndCategoryResponse> deleteProduct(@PathVariable Long id) {
-	        DeleteProductAndCategoryResponse response = sellerService.deleteProduct(id);
-
-	        // Check the status in the response and return the appropriate HTTP status
-	        HttpStatus httpStatus = response.getStatus().equalsIgnoreCase("True") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-
-	        return new ResponseEntity<>(response, httpStatus);
+	    public ResponseEntity<Map<String,Object>> deleteProduct(@PathVariable Long id) {
+		 Map<String,Object> response = sellerService.deleteProduct(id);
+		 
+		 return ResponseEntity.ok(response);
 	    }
 	 
 	 @DeleteMapping("/deleteCategory/{id}")
-	    public ResponseEntity<DeleteProductAndCategoryResponse> deleteCategory(@PathVariable Long id) {
-	        DeleteProductAndCategoryResponse response = sellerService.deleteCategory(id);
+	    public ResponseEntity<Map<String,Object>> deleteCategory(@PathVariable Long id) {
+		 Map<String,Object>  response = sellerService.deleteCategory(id);
 
-	        // Check the status in the response and return the appropriate HTTP status
-	        HttpStatus httpStatus = response.getStatus().equalsIgnoreCase("True") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-
-	        return new ResponseEntity<>(response, httpStatus);
+		 return ResponseEntity.ok(response);
+	       
 	    }
 	 
 //		@PostMapping("/addPaymentType")

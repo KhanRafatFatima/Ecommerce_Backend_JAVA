@@ -2,11 +2,10 @@ package com.ebos.Service;
 
 import java.util.Map;
 
+import com.ebos.Request.AddProductToCartRequest;
 import com.ebos.Request.UserAddressRequest;
 import com.ebos.Request.UserOrderProductRequest;
 import com.ebos.Response.ApiResponse;
-import com.ebos.Response.GetUserDataResponse;
-import com.ebos.Response.SetListResponse;
 
 public interface BuyerService {
 	 
@@ -21,7 +20,13 @@ public interface BuyerService {
     public Map<String, Object> getUserData(); 
     
     public Map<String,Object> findAllProducts();
+    
+    public Map<String,Object> findAllCategory();
 	
     public Map<String,Object> getSpecificProduct(String categoryName);
+    
+    public Map<String,Object> addProductToCart(AddProductToCartRequest addProductToCartRequest);
+    
+    public Map<String,Object> deleteProductFromCart(Long id);
 
 }

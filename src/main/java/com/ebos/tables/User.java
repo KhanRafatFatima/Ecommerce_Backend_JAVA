@@ -23,6 +23,7 @@ public class User {
     @Size(max = 40)
     private String firstname;
     
+    
     @Size(max=40)
     private String middlename;
     
@@ -66,8 +67,8 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserAddress userAddress;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Cart cart;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Cart> cart;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Transaction transaction;
@@ -226,12 +227,22 @@ public class User {
 		this.orderDetails = orderDetails;
 	}
 
-	public Cart getCart() {
+	
+
+	public Set<Cart> getCart() {
 		return cart;
 	}
 
-	public void setCart(Cart cart) {
+	public void setCart(Set<Cart> cart) {
 		this.cart = cart;
+	}
+
+	public Transaction getTransaction() {
+		return transaction;
+	}
+
+	public void setTransaction(Transaction transaction) {
+		this.transaction = transaction;
 	}
 
 	public Transaction getPayment() {

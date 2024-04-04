@@ -63,8 +63,8 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(
 						auth -> auth.requestMatchers("/api/auth/**","/**").permitAll()
-						.requestMatchers("/api/**").hasAnyAuthority("ROLE_USER")
-						.requestMatchers("/seller/**").hasAnyAuthority("ROLE_SELLER")
+						.requestMatchers("/buyer/**").hasRole("BUYER")
+						.requestMatchers("/seller/**").hasRole("SELLER")
 						
 						.anyRequest().authenticated());
 		// Add our custom JWT security filter
