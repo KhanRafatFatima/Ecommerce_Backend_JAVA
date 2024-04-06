@@ -25,8 +25,8 @@ public interface BuyerService {
 	
     public Map<String,Object> getSpecificProduct(String categoryName);
     
-    public Map<String,Object> addProductToCart(AddProductToCartRequest addProductToCartRequest);
+   // public Map<String,Object> addProductToCart(AddProductToCartRequest addProductToCartRequest);
     
-    public Map<String,Object> deleteProductFromCart(Long id);
+    //public Map<String,Object> deleteProductFromCart(Long id);
 
 }

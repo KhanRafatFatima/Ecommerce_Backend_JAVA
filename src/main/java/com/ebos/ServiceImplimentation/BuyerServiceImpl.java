@@ -280,83 +280,83 @@ public class BuyerServiceImpl implements BuyerService{
 		}
 
       /////////two things should be added if the product same is already present in cart then just increment the quantity of product 
-		@Override
-		public Map<String, Object> addProductToCart(AddProductToCartRequest addProductToCartRequest) {
-		    Map<String, Object> map = new HashMap<>();
-		    try {
-		        UserPrincipal authenticatedUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		        Optional<User> userOptional = userRepository.findById(authenticatedUser.getId());
-
-		        List<Products> productsList = productRepository.findByProductTitle(addProductToCartRequest.getProductTitle());
-
-		        if (userOptional.isPresent()) {
-		            if (!productsList.isEmpty()) {
-		                // If there are multiple products with the same title, select the first one
-		                Products product = productsList.get(0);
-
-		                Cart cart = new Cart();
-		                cart.setQuantity(addProductToCartRequest.getQuantity());
-		                cart.setProducts(product);
-		                cart.setUser(userOptional.get());
-		                cart.setCreateddate(LocalDateTime.now());
-                        cart.setModifieddate(LocalDateTime.now());
-		                cartRepository.save(cart);
-
-		                map.put("status", true);
-		                map.put("message", "Added to Cart");
-		            } else {
-		                map.put("status", false);
-		                map.put("message", "Product not found");
-		            }
-		        } else {
-		            map.put("status", false);
-		            map.put("message", "User not found");
-		        }
-		    } catch (Exception e) {
-		        map.put("status", false);
-		        System.out.println("Error occurred: " + e);
-		        map.put("message", "Error occurred");
-		    }
-		    return map;
-		}
-
-
-		@Override
-		public Map<String, Object> deleteProductFromCart(Long id) {
-			Map<String,Object> map=new HashMap<>();
-			try {
-				UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-				
-		        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("BUYER"))) {
-				
-		  
-		        	
-				Optional<Cart> cartOptional=cartRepository.findById(id);
-				
-				if(cartOptional.isPresent()) {
-					Cart cart=cartOptional.get();
-					
-					cartRepository.delete(cart);
-					
-						map.put("status", true);
-						map.put("message", "Removed from cart Successfully");
-				
-				}else {
-					map.put("status", false);
-					map.put("message","product not found" );
-				}
-		       }else {
-		    	    map.put("status", false);
-					map.put("message","user doesnt have required Role" );
-		       }
-			}catch(Exception e) {
-				map.put("status", false);
-				map.put("message","Error occured" );
-		    	   
-		       }
-			return map;
-
-		}
+//		@Override
+//		public Map<String, Object> addProductToCart(AddProductToCartRequest addProductToCartRequest) {
+//		    Map<String, Object> map = new HashMap<>();
+//		    try {
+//		        UserPrincipal authenticatedUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		        Optional<User> userOptional = userRepository.findById(authenticatedUser.getId());
+//
+//		        List<Products> productsList = productRepository.findByProductTitle(addProductToCartRequest.getProductTitle());
+//
+//		        if (userOptional.isPresent()) {
+//		            if (!productsList.isEmpty()) {
+//		                // If there are multiple products with the same title, select the first one
+//		                Products product = productsList.get(0);
+//
+//		                Cart cart = new Cart();
+//		                cart.setQuantity(addProductToCartRequest.getQuantity());
+//		                cart.setProducts(product);
+//		                cart.setUser(userOptional.get());
+//		                cart.setCreateddate(LocalDateTime.now());
+//                        cart.setModifieddate(LocalDateTime.now());
+//		                cartRepository.save(cart);
+//
+//		                map.put("status", true);
+//		                map.put("message", "Added to Cart");
+//		            } else {
+//		                map.put("status", false);
+//		                map.put("message", "Product not found");
+//		            }
+//		        } else {
+//		            map.put("status", false);
+//		            map.put("message", "User not found");
+//		        }
+//		    } catch (Exception e) {
+//		        map.put("status", false);
+//		        System.out.println("Error occurred: " + e);
+//		        map.put("message", "Error occurred");
+//		    }
+//		    return map;
+//		}
+//
+//
+//		@Override
+//		public Map<String, Object> deleteProductFromCart(Long id) {
+//			Map<String,Object> map=new HashMap<>();
+//			try {
+//				UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//				
+//		        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("BUYER"))) {
+//				
+//		  
+//		        	
+//				Optional<Cart> cartOptional=cartRepository.findById(id);
+//				
+//				if(cartOptional.isPresent()) {
+//					Cart cart=cartOptional.get();
+//					
+//					cartRepository.delete(cart);
+//					
+//						map.put("status", true);
+//						map.put("message", "Removed from cart Successfully");
+//				
+//				}else {
+//					map.put("status", false);
+//					map.put("message","product not found" );
+//				}
+//		       }else {
+//		    	    map.put("status", false);
+//					map.put("message","user doesnt have required Role" );
+//		       }
+//			}catch(Exception e) {
+//				map.put("status", false);
+//				map.put("message","Error occured" );
+//		    	   
+//		       }
+//			return map;
+//
+//		}
 
 
 }
