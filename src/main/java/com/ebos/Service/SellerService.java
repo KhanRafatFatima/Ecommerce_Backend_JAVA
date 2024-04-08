@@ -18,6 +18,8 @@ public interface SellerService {
 	
 	public Map<String,Object> deleteCategory(Long id);
 	
+	public Map<String,Object> addSales();
+	
 	
 	
 	

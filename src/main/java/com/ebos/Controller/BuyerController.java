@@ -47,20 +47,20 @@ public class BuyerController {
 		
 	 }
 	 
-	 @DeleteMapping("/deleteFromCart/{id}")
-	    public ResponseEntity<Map<String,Object>> deleteProduct(@PathVariable Long id) {
-		 Map<String,Object> response = buyerService.deleteProductFromCart(id);
-		 
-		 return ResponseEntity.ok(response);
-	    }
-	 
-	 @PostMapping("/addToCart")
-	    public ResponseEntity<Map<String,Object>> addToCart(@RequestBody AddProductToCartRequest addProductToCartRequest){ 
-			Map<String,Object> productData=buyerService.addProductToCart(addProductToCartRequest);
-			 return ResponseEntity.ok(productData);
-		
-	 }
-	 
+//	 @DeleteMapping("/deleteFromCart/{id}")
+//	    public ResponseEntity<Map<String,Object>> deleteProduct(@PathVariable Long id) {
+//		 Map<String,Object> response = buyerService.deleteProductFromCart(id);
+//		 
+//		 return ResponseEntity.ok(response);
+//	    }
+//	 
+//	 @PostMapping("/addToCart")
+//	    public ResponseEntity<Map<String,Object>> addToCart(@RequestBody AddProductToCartRequest addProductToCartRequest){ 
+//			Map<String,Object> productData=buyerService.addProductToCart(addProductToCartRequest);
+//			 return ResponseEntity.ok(productData);
+//		
+//	 }
+//	 
 //	 @GetMapping("/getProducts/{categoryName}")
 //	    public ResponseEntity<?> getSpecificProducts(@RequestBody String categoryName){ 
 //			Map<String,Object> productData=buyerService.getSpecificProduct(categoryName);
