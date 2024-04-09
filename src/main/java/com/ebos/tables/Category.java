@@ -11,11 +11,9 @@ public class Category {
     private Long categoryId;
 
     private String categoryTitle;
-
-    private String categoryName;
-
-    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
-    private Set<Products> products;
+    
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<SubCategory> subcategory;
 
     // Constructors, getters, and setters...
 	
@@ -44,32 +42,9 @@ public class Category {
 	}
 
 
-	
-	public String getCategoryName() {
-		return categoryName;
-	}
-
-
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-
-
-	public Set<Products> getProducts() {
-		return products;
-	}
-
-
-	public void setProducts(Set<Products> products) {
-		this.products = products;
-	}
-
-
-	public Category(String categoryTitle, String categoryName, Set<Products> products) {
+	public Category(String categoryTitle) {
 		super();
 		this.categoryTitle = categoryTitle;
-		this.categoryName = categoryName;
-		this.products = products;
 	}
 
 

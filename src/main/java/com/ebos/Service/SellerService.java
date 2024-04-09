@@ -18,6 +18,14 @@ public interface SellerService {
 	
 	public Map<String,Object> deleteCategory(Long id);
 	
+	public Map<String,Object> addSubCategory(AddCategoryRequest addCategoryRequest);
+	
+	public Map<String,Object> deleteSubCategory(Long id);
+	
+	
+	
+//	public Map<String,Object> updateSubCategory(AddCategoryRequest addCategoryRequest);
+	
 	public Map<String,Object> addSales();
 	
 	

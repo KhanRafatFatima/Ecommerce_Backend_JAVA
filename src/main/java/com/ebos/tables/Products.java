@@ -50,7 +50,7 @@ public class Products {
     @ManyToMany
     @JoinTable(name="product_category",joinColumns = @JoinColumn(name="product_id"),
                                        inverseJoinColumns =@JoinColumn(name="category_id"))
-    private Set<Category> categories=new HashSet<>();
+    private Set<SubCategory> categories=new HashSet<>();
     
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ProductImages> images;
@@ -205,11 +205,11 @@ public class Products {
 		this.sales = sales;
 	}
 
-	public Set<Category> getCategories() {
+	public Set<SubCategory> getCategories() {
 		return categories;
 	}
 
-	public void setCategories(Set<Category> categories) {
+	public void setCategories(Set<SubCategory> categories) {
 		this.categories = categories;
 	}
 
@@ -240,7 +240,7 @@ public class Products {
 	public Products(String productTitle, String productDesc, String productSummary, Long productPrice,
 			LocalDateTime productCreatedDate, LocalDateTime productUpdatedDate, LocalDateTime productPublishedDate,
 			Long sellerId, Long quantity, BigDecimal discount, LocalDateTime saleStartsDate, LocalDateTime salesEndDate,
-			Set<Category> categories,String productBannerImage,boolean sales) {
+			Set<SubCategory> categories,String productBannerImage,boolean sales) {
 		super();
 		this.productTitle = productTitle;
 		this.productDesc = productDesc;

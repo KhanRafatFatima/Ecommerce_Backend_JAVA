@@ -1,3 +1,4 @@
+
 package com.ebos.ServiceImplimentation;
 
 import java.time.LocalDateTime;
@@ -14,10 +15,12 @@ import com.ebos.Request.AddProductRequest;
 import com.ebos.Service.SellerService;
 import com.ebos.repository.CategoryRepository;
 import com.ebos.repository.ProductRepository;
+import com.ebos.repository.SubCategoryRepository;
 import com.ebos.repository.UserRepository;
 import com.ebos.security.UserPrincipal;
 import com.ebos.tables.Category;
 import com.ebos.tables.Products;
+import com.ebos.tables.SubCategory;
 import com.ebos.tables.User;
 
 @Service
@@ -32,47 +35,42 @@ public class SellerServiceImpl implements SellerService {
 	@Autowired
 	CategoryRepository categoryRepository;
 	
+	@Autowired
+	SubCategoryRepository subCategoryRepository;
+	
 	
 	@Override
 	public Map<String, Object> addProducts(AddProductRequest addProductRequest) {
 	    Map<String, Object> map = new HashMap<>();
 	    try {
 	        UserPrincipal authenticatedUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
+	            Optional<SubCategory> categoryOptional = subCategoryRepository.findByCategoryName(addProductRequest.getCategoryName());
+	            
+	            if(categoryOptional.isPresent()) {
+	                SubCategory category = categoryOptional.get();
 
-//	        // Check if the authenticated user has the "SELLER" role
-//	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
+	                Products product = new Products();
+	                product.setProductTitle(addProductRequest.getProductTitle());
+	                product.setProductDesc(addProductRequest.getProductDesc());
+	                product.setProductSummary(addProductRequest.getProductSummary());
+	                product.setProductPrice(addProductRequest.getProductPrice());
+	                product.setProductCreatedDate(LocalDateTime.now());
+	                product.setProductPublishedDate(LocalDateTime.now());
+	                product.setSellerId(authenticatedUser.getId());
+	                product.setQuantity(addProductRequest.getQuantity());
+	                product.setDiscount(addProductRequest.getDiscount());
+	                product.setSales(addProductRequest.isSales());
+	                if (product.isSales()) {
+	                    product.setSaleStartsDate(addProductRequest.getSaleStartsDate());
+	                    product.setSalesEndDate(addProductRequest.getSalesEndDate());
+	                }
 
-	            // Create a new product instance
-	            Products product = new Products();
-	            product.setProductTitle(addProductRequest.getProductTitle());
-	            product.setProductDesc(addProductRequest.getProductDesc());
-	            product.setProductSummary(addProductRequest.getProductSummary());
-	            product.setProductPrice(addProductRequest.getProductPrice());
-	            product.setProductCreatedDate(LocalDateTime.now());
-	            product.setProductPublishedDate(LocalDateTime.now());
-	            product.setSellerId(authenticatedUser.getId());
-	            product.setQuantity(addProductRequest.getQuantity());
-	            product.setDiscount(addProductRequest.getDiscount());
-	            product.setSales(addProductRequest.isSales());
-	            if (product.isSales()) {
-	                product.setSaleStartsDate(addProductRequest.getSaleStartsDate());
-	                product.setSalesEndDate(addProductRequest.getSalesEndDate());
-	            }
+	                product.getCategories().add(category);
+	                category.getProducts().add(product);
 
-	            // Save the product to the database
-	            Products savedProduct = productRepository.save(product);
-
-	            // Fetch the category by name
-	            Optional<Category> categoryOptional = categoryRepository.findByCategoryName(addProductRequest.getCategoryName());
-	            if (categoryOptional.isPresent()) {
-	                Category category = categoryOptional.get();
-
-	                // Map the relationship between the product and the category
-	                savedProduct.getCategories().add(category);
-	                category.getProducts().add(savedProduct);
-
-	                productRepository.save(savedProduct);
-	                categoryRepository.save(category);
+	                productRepository.save(product);
+	                subCategoryRepository.save(category);
 
 	                map.put("status", true);
 	                map.put("message", "Product added successfully");
@@ -80,13 +78,12 @@ public class SellerServiceImpl implements SellerService {
 	                map.put("status", false);
 	                map.put("message", "Category not found");
 	            }
-//	        } else {
-//	            map.put("status", false);
-//	            map.put("message", "Access denied. User does not have the required role.");
-//	        }
+	        } else {
+	            map.put("status", false);
+	            map.put("message", "Access denied. User does not have the required role.");
+	        }
 	    } catch (Exception e) {
 	        map.put("status", false);
-	        System.out.println("-------------->" +e);
 	        map.put("message", "Error occurred: " + e.getMessage());
 	    }
 
@@ -191,43 +188,40 @@ public class SellerServiceImpl implements SellerService {
 	
 
 	@Override
-	public Map<String,Object>  addCategory(AddCategoryRequest addCategoryRequest) {
-		Map<String,Object> map=new HashMap<>();
-		try {
-			UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			
-			  // Check if the authenticated user has the "Admin" role
+	public Map<String,Object> addCategory(AddCategoryRequest addCategoryRequest) {
+	    Map<String,Object> map = new HashMap<>();
+	    try {
+	        UserPrincipal authenticatedUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
-			
-			Optional<User> userOptional=userRepository.findById(authenticatedUser.getId());
-			
-			if(userOptional.isPresent()) {
-				Category category=new Category();
-				
-				category.setCategoryTitle(addCategoryRequest.getCategoryTitle());
-				category.setCategoryName(addCategoryRequest.getCategoryName());
-				
-				categoryRepository.save(category);
-				
-				map.put("status", true);
-				map.put("message", "category added successfully");
-				
-			}else {
-				map.put("status", false);
-				map.put("message", "User not found");
-			}
-	       }else {
-	    	   	map.put("status", false);
-				map.put("message", "Access denied. User does not have the required role.");
-	       }
-			
-		}catch(Exception e) {
-			map.put("status", false);
-			map.put("message", "Error Occured");
-		}
-		
-		return map;
-		}
+	            Optional<User> userOptional = userRepository.findById(authenticatedUser.getId());
+	            if (userOptional.isPresent()) {
+	                Optional<Category> categoryOptional = categoryRepository.findByCategoryTitle(addCategoryRequest.getCategoryTitle());
+	                if (categoryOptional.isEmpty()) {
+	                    Category category = new Category();    
+	                    category.setCategoryTitle(addCategoryRequest.getCategoryTitle());
+	                    categoryRepository.save(category);
+	                    map.put("status", true);
+	                    map.put("message", "Category added successfully");
+	                } else {
+	                    map.put("status", false);
+	                    map.put("message", "Category title already exists");
+	                }
+	            } else {
+	                map.put("status", false);
+	                map.put("message", "User not found");
+	            }
+	        } else {
+	            map.put("status", false);
+	            map.put("message", "Access denied. User does not have the required role.");
+	        }
+	    } catch(Exception e) {
+	    		e.printStackTrace(); 
+	    	    map.put("status", false);
+	    	    map.put("message", "Error occurred: " + e.getMessage());
+	    }
+	    return map;
+	}
+
 	
 	@Override
 	public Map<String, Object> updateCategory(AddCategoryRequest addCategoryRequest,Long id) {
@@ -243,7 +237,6 @@ public class SellerServiceImpl implements SellerService {
 	             Category category=categoryOptional.get();
 	             
 	             	category.setCategoryTitle(addCategoryRequest.getCategoryTitle());
-					category.setCategoryName(addCategoryRequest.getCategoryName());
 					
 					categoryRepository.save(category);
 					
@@ -301,6 +294,136 @@ public class SellerServiceImpl implements SellerService {
 		
 		return map;
 	}
+	
+	@Override
+	public Map<String, Object> addSubCategory(AddCategoryRequest addCategoryRequest) {
+		Map<String,Object> map=new HashMap<>();
+		try {
+		UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
+			 Optional<User> userOptional = userRepository.findById(authenticatedUser.getId());
+	            if (userOptional.isPresent()) {
+	                SubCategory subCategory=new SubCategory();
+	              Optional<Category> categoryOptional=categoryRepository.findByCategoryTitle(addCategoryRequest.getCategoryTitle());
+	              
+	              if(categoryOptional.isPresent()) {
+	                
+	                subCategory.setCategoryName(addCategoryRequest.getCategoryName());
+	                
+	                subCategory.setCategory(categoryOptional.get());
+	                
+	                subCategoryRepository.save(subCategory);
+	                
+	                map.put("status", true);
+                    map.put("message", "SubCategory added successfully");
+	                
+	              }else {
+	            	  map.put("status", false);
+	  				  map.put("message", "Category not found");
+	              }
+	                
+	            }else {
+	            	map.put("status", false);
+					map.put("message", "User not found");
+	            }
+			
+			
+		}else {
+			map.put("status", false);
+			map.put("message", "Access denied. User does not have the required role.");
+       
+		}
+		
+		}catch(Exception e) {
+			map.put("status", false);
+			map.put("message", "Error Occured");
+		}
+		
+		return map;
+
+	}
+	
+	@Override
+	public Map<String, Object> deleteSubCategory(Long id) {
+	    Map<String, Object> map = new HashMap<>();
+	    try {
+	    	
+	    	 UserPrincipal authenticatedUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
+	        Optional<SubCategory> subCategoryOptional = subCategoryRepository.findById(id);
+	        if (subCategoryOptional.isPresent()) {
+	            subCategoryRepository.delete(subCategoryOptional.get());
+	            map.put("status", true);
+	            map.put("message", "SubCategory deleted successfully");
+	        } else {
+	            map.put("status", false);
+	            map.put("message", "SubCategory not found");
+	        }
+		        }else {
+		        	map.put("status", false);
+					map.put("message", "Access denied. User does not have the required role.");
+		        }
+	    } catch (Exception e) {
+	        map.put("status", false);
+	        map.put("message", "Error occurred: " + e.getMessage());
+	    }
+	    return map;
+	}
+
+//	@Override
+//	public Map<String, Object> updateSubCategory(AddCategoryRequest addCategoryRequest6) {
+//	    Map<String, Object> map = new HashMap<>();
+//	    try {
+//	        UserPrincipal authenticatedUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
+//	            Optional<User> userOptional = userRepository.findById(authenticatedUser.getId());
+//	            if (userOptional.isPresent()) {
+//	                Optional<SubCategory> subCategoryOptional = subCategoryRepository.findById(addCategoryRequest.getId());
+//	                if (subCategoryOptional.isPresent()) {
+//	                    SubCategory subCategory = subCategoryOptional.get();
+//	                    Optional<Category> categoryOptional = categoryRepository.findByCategoryTitle(addCategoryRequest.getCategoryTitle());
+//	                    if (categoryOptional.isPresent()) {
+//	                        // Update the subcategory with the new category
+//	                        subCategory.setCategoryName(addCategoryRequest.getCategoryName());
+//	                        subCategory.setCategory(categoryOptional.get());
+//	                        subCategoryRepository.save(subCategory);
+//	                        map.put("status", true);
+//	                        map.put("message", "SubCategory updated successfully");
+//	                    } else {
+//	                        map.put("status", false);
+//	                        map.put("message", "Category not found");
+//	                    }
+//	                } else {
+//	                    map.put("status", false);
+//	                    map.put("message", "SubCategory not found");
+//	                }
+//	            } else {
+//	                map.put("status", false);
+//	                map.put("message", "User not found");
+//	            }
+//	        } else {
+//	            map.put("status", false);
+//	            map.put("message", "Access denied. User does not have the required role.");
+//	        }
+//	    } catch (Exception e) {
+//	        map.put("status", false);
+//	        map.put("message", "Error occurred: " + e.getMessage());
+//	    }	
+//	    return map;
+//	}
+
+
+
+
+	@Override
+	public Map<String, Object> addSales() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	
 
 
 

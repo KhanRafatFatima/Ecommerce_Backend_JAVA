@@ -127,7 +127,7 @@ public class BuyerServiceImpl implements BuyerService{
 	public Map<String, Object> getSpecificProduct(String categoryName) {
 	   Map<String,Object> map=new HashMap<>();
 	   try {
-		   Optional<Category> categoryOptional=categoryRepository.findByCategoryName(categoryName);
+		   //Optional<Category> categoryOptional=categoryRepository.findByCategoryName(categoryName);
 		   
 		   
 		   

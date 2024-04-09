@@ -52,6 +52,13 @@ public class SellerController {
 		return ResponseEntity.ok(response);
     }
 	
+	@PostMapping("/addSubCategory")
+    public ResponseEntity<Map<String,Object>> addSubCategory(@RequestBody AddCategoryRequest addCategoryRequest) {
+		Map<String,Object>response =  sellerService.addSubCategory(addCategoryRequest);
+
+		return ResponseEntity.ok(response);
+    }
+	
 	@PostMapping("/updateCategory/{id}")
     public ResponseEntity<Map<String,Object>> updateCategory(@RequestBody AddCategoryRequest addCategoryRequest,@PathVariable Long id) {
 		Map<String,Object> response =  sellerService.updateCategory(addCategoryRequest,id);
@@ -75,6 +82,20 @@ public class SellerController {
 		 return ResponseEntity.ok(response);
 	       
 	    }
+	 
+	 @DeleteMapping("/deleteSubCategory/{id}")
+	    public ResponseEntity<Map<String,Object>> deleteSubCategory(@PathVariable Long id) {
+		 Map<String,Object> response = sellerService.deleteSubCategory(id);
+		 
+		 return ResponseEntity.ok(response);
+	    }
+	 
+//	 @PutMapping("/updateSubCategory/{id}")
+//		public ResponseEntity<Map<String,Object>> updateSubCategory(@PathVariable Long id,@RequestBody AddProductRequest updateProductRequest){
+//			Map<String,Object> response=sellerService.updateSubCategory(updateProductRequest, id);
+//			
+//			return ResponseEntity.ok(response);
+//		}
 	 
 //		@PostMapping("/addPaymentType")
 //	    public ResponseEntity<ApiResponse> addPaymentType(@RequestBody AddPaymentTypeRequest addPaymentTypeRequest) {
