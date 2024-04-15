@@ -55,17 +55,18 @@ public class SecurityConfig {
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
+	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()).cors(cros -> cros.disable())
 				.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(
-						auth -> auth.requestMatchers("/api/auth/**","/**").permitAll()
-						.requestMatchers("/buyer/**").hasRole("BUYER")
-						.requestMatchers("/seller/**").hasRole("SELLER")
-						
+						auth -> auth.requestMatchers("/api/auth/**").permitAll()
+						.requestMatchers("/api/**").hasAnyAuthority("ROLE_USER")
+						.requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
+						.requestMatchers("/buyer/**").hasAnyAuthority("ROLE_BUYER")
+						.requestMatchers("/seller/**").hasAnyAuthority("ROLE_SELLER")
 						.anyRequest().authenticated());
 		// Add our custom JWT security filter
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -74,6 +75,25 @@ public class SecurityConfig {
 
 		return http.build();
 	}
+
+//	@Bean
+//	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//		http.csrf(csrf -> csrf.disable()).cors(cros -> cros.disable())
+//				.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+//				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//				.authorizeHttpRequests(
+//						auth -> auth.requestMatchers("/api/auth/**","/**").permitAll()
+//						.requestMatchers("/buyer/**").hasRole("BUYER")
+//						.requestMatchers("/seller/**").hasRole("SELLER")
+//						
+//						.anyRequest().authenticated());
+//		// Add our custom JWT security filter
+//		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//
+//		http.authenticationProvider(authenticationProvider());
+//
+//		return http.build();
+//	}
 
 }
 
