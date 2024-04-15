@@ -76,24 +76,6 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-//	@Bean
-//	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//		http.csrf(csrf -> csrf.disable()).cors(cros -> cros.disable())
-//				.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-//				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//				.authorizeHttpRequests(
-//						auth -> auth.requestMatchers("/api/auth/**","/**").permitAll()
-//						.requestMatchers("/buyer/**").hasRole("BUYER")
-//						.requestMatchers("/seller/**").hasRole("SELLER")
-//						
-//						.anyRequest().authenticated());
-//		// Add our custom JWT security filter
-//		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-//
-//		http.authenticationProvider(authenticationProvider());
-//
-//		return http.build();
-//	}
 
 }
 

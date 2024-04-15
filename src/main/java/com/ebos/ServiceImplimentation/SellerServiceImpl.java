@@ -44,7 +44,6 @@ public class SellerServiceImpl implements SellerService {
 	    Map<String, Object> map = new HashMap<>();
 	    try {
 	        UserPrincipal authenticatedUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
 	            Optional<SubCategory> categoryOptional = subCategoryRepository.findByCategoryName(addProductRequest.getCategoryName());
 	            
 	            if(categoryOptional.isPresent()) {
@@ -78,10 +77,7 @@ public class SellerServiceImpl implements SellerService {
 	                map.put("status", false);
 	                map.put("message", "Category not found");
 	            }
-	        } else {
-	            map.put("status", false);
-	            map.put("message", "Access denied. User does not have the required role.");
-	        }
+	    
 	    } catch (Exception e) {
 	        map.put("status", false);
 	        map.put("message", "Error occurred: " + e.getMessage());
@@ -97,9 +93,6 @@ public class SellerServiceImpl implements SellerService {
 		Map<String,Object> map=new HashMap<>();
 		try {
 			UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			
-			  // Check if the authenticated user has the "Admin" role
-	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
 			
 	        
 			Optional<Products> productOptional=productRepository.findById(id);
@@ -134,10 +127,7 @@ public class SellerServiceImpl implements SellerService {
 			}
 			
 			
-	        }else {
-	        	map.put("status", false);
-				map.put("message","user doesn't have required Role" );
-	        }
+	        
 			
 			
 		}catch(Exception e) {
@@ -154,10 +144,6 @@ public class SellerServiceImpl implements SellerService {
 		try {
 			UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
-			  // Check if the authenticated user has the "Admin" role
-	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
-			
-	        
 			Optional<Products> productOptional=productRepository.findById(id);
 			
 			if(productOptional.isPresent()) {
@@ -172,10 +158,7 @@ public class SellerServiceImpl implements SellerService {
 				map.put("status", false);
 				map.put("message","product not found" );
 			}
-	       }else {
-	    	    map.put("status", false);
-				map.put("message","user doesnt have required Role" );
-	       }
+	       
 		}catch(Exception e) {
 			map.put("status", false);
 			map.put("message","Error occured" );
@@ -192,7 +175,6 @@ public class SellerServiceImpl implements SellerService {
 	    Map<String,Object> map = new HashMap<>();
 	    try {
 	        UserPrincipal authenticatedUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
 	            Optional<User> userOptional = userRepository.findById(authenticatedUser.getId());
 	            if (userOptional.isPresent()) {
 	                Optional<Category> categoryOptional = categoryRepository.findByCategoryTitle(addCategoryRequest.getCategoryTitle());
@@ -210,10 +192,7 @@ public class SellerServiceImpl implements SellerService {
 	                map.put("status", false);
 	                map.put("message", "User not found");
 	            }
-	        } else {
-	            map.put("status", false);
-	            map.put("message", "Access denied. User does not have the required role.");
-	        }
+	        
 	    } catch(Exception e) {
 	    		e.printStackTrace(); 
 	    	    map.put("status", false);
@@ -228,9 +207,6 @@ public class SellerServiceImpl implements SellerService {
 		Map<String,Object> map=new HashMap<>();
 		try {
 			UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			
-			  // Check if the authenticated user has the "Admin" role
-	        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
 	        	Optional<Category> categoryOptional=categoryRepository.findById(id);
 	        	
 	        	if(categoryOptional.isPresent()) {
@@ -247,10 +223,7 @@ public class SellerServiceImpl implements SellerService {
 	        		map.put("status", false);
 					map.put("message", "User not found");
 				}
-		       }else {
-		    	   	map.put("status", false);
-					map.put("message", "Access denied. User does not have the required role.");
-		       }
+		       
 				
 			}catch(Exception e) {
 				map.put("status", false);
@@ -266,8 +239,6 @@ public class SellerServiceImpl implements SellerService {
 		try {
 		UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		 
-		// Check if the authenticated user has the "Admin" role
-        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
         	Optional<Category> categoryOptional=categoryRepository.findById(id);
         	
         	if(categoryOptional.isPresent()) {
@@ -282,11 +253,7 @@ public class SellerServiceImpl implements SellerService {
         		map.put("status", false);
 				map.put("message", "Category not found");
 			}
-	       }else {
-	    	   	map.put("status", false);
-				map.put("message", "Access denied. User does not have the required role.");
 	       
-        	}
 	 }catch(Exception e) {
 		 	map.put("status", false);
 			map.put("message", "Error Occured");
@@ -300,7 +267,6 @@ public class SellerServiceImpl implements SellerService {
 		Map<String,Object> map=new HashMap<>();
 		try {
 		UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
 			 Optional<User> userOptional = userRepository.findById(authenticatedUser.getId());
 	            if (userOptional.isPresent()) {
 	                SubCategory subCategory=new SubCategory();
@@ -328,11 +294,7 @@ public class SellerServiceImpl implements SellerService {
 	            }
 			
 			
-		}else {
-			map.put("status", false);
-			map.put("message", "Access denied. User does not have the required role.");
-       
-		}
+		
 		
 		}catch(Exception e) {
 			map.put("status", false);
@@ -349,7 +311,6 @@ public class SellerServiceImpl implements SellerService {
 	    try {
 	    	
 	    	 UserPrincipal authenticatedUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
 	        Optional<SubCategory> subCategoryOptional = subCategoryRepository.findById(id);
 	        if (subCategoryOptional.isPresent()) {
 	            subCategoryRepository.delete(subCategoryOptional.get());
@@ -359,10 +320,7 @@ public class SellerServiceImpl implements SellerService {
 	            map.put("status", false);
 	            map.put("message", "SubCategory not found");
 	        }
-		        }else {
-		        	map.put("status", false);
-					map.put("message", "Access denied. User does not have the required role.");
-		        }
+		        
 	    } catch (Exception e) {
 	        map.put("status", false);
 	        map.put("message", "Error occurred: " + e.getMessage());
