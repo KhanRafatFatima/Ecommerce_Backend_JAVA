@@ -113,10 +113,7 @@ public class SellerController {
 	 
 	 
 	 
-	@GetMapping("/getAllUsers") 
-	public SetListResponse findAll() {
-		return userService.findAll();
-	}
+	
 	
 	@DeleteMapping("/deleteuser")
     public ResponseEntity<?> deleteUser() {
