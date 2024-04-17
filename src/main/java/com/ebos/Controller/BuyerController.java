@@ -30,15 +30,6 @@ public class BuyerController {
 	@Autowired
 	BuyerService buyerService;
 	
-	 @GetMapping("/getUserData")
-	    public ResponseEntity<?> getUserData() {
-	        try {
-	            Map<String, Object> userData = buyerService.getUserData();
-	            return ResponseEntity.ok(userData);
-	        } catch (Exception e) {
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-	        }
-	    }
 	 
 	 @GetMapping("/getProducts")
 	    public ResponseEntity<?> getProducts(){ 

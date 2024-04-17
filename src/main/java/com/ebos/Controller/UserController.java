@@ -1,5 +1,7 @@
 package com.ebos.Controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.ebos.Request.SignUpRequest;
 import com.ebos.Response.ApiResponse;
-import com.ebos.Response.DeleteResponse;
 import com.ebos.Response.GetUserDataResponse;
 import com.ebos.Response.SetListResponse;
 import com.ebos.Response.UpdateResponse;
@@ -26,28 +27,26 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-
-
-//	@GetMapping("/get")
-//	public ResponseEntity<?> getUserData() {
-//		
-//		try {
-//			return new ResponseEntity<GetUserDataResponse>(userService.getUserData(), HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<GetUserDataResponse>(userService.getUserData(),
-//					HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
-
-	@PutMapping("/updateUserInfo")
-	public ResponseEntity<?> updateUserInfo(@RequestBody SignUpRequest signUpRequest) {
+	
+	@GetMapping("/getUserData")
+	public ResponseEntity<Map<String,Object>> getUserData(){
+       Map<String,Object> response=userService.getUserData();
 		
-		try {
-			return new ResponseEntity<UpdateResponse>(userService.updateUser(signUpRequest), HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<UpdateResponse>(userService.updateUser(signUpRequest),
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return ResponseEntity.ok(response);
+	}
+	
+	@DeleteMapping("/deleteUserAccount")
+	public ResponseEntity<Map<String,Object>> deleteAccount(){
+		Map<String,Object> response=userService.deleteUserAccount();
+		
+		return ResponseEntity.ok(response);
+	}
+
+    @PutMapping("/updateUserAccount")
+    public ResponseEntity<Map<String,Object>> updateAccount(@RequestBody SignUpRequest updateRequest){
+		Map<String,Object> response=userService.updateUserDetails(updateRequest);
+		
+		return ResponseEntity.ok(response);
 	}
 	
 }

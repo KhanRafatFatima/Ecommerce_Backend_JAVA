@@ -61,52 +61,7 @@ public class BuyerServiceImpl implements BuyerService{
 	
 
 
-	@Override
-	public Map<String, Object> getUserData() {
-		 Map<String, Object> map = new HashMap<>();
-		 List<Map<String, Object>> list = new ArrayList<>();
-		 
-		 try {
-			 Map<String, Object> tempMap=new HashMap<>();
-			 UserPrincipal authenticatedUser=(UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			 Optional<User> userOptional=userRepository.findById(authenticatedUser.getId());
-			 if(userOptional.isPresent()) {
-				 User user=userOptional.get();
-				 
-				 tempMap.put("Name", user.getFirstname());
-				 tempMap.put("MiddleName", user.getLastname());
-				 tempMap.put("LastName", user.getMiddlename());
-				 tempMap.put("Username",user.getUsername());
-				 tempMap.put("Email", user.getEmail());
-				 tempMap.put("mobileNo", user.getMobileNo());
-				// Check if the authenticated user has the "Seller" role
-			        if (authenticatedUser.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("SELLER"))) {
-				 tempMap.put("Profile",user.getProfile());
-				 tempMap.put("Intro", user.getIntro());
-			        }
-
-				 list.add(tempMap);
-				 
-				 map.put("UserData", list);
-				 map.put("message", "success");
-		         map.put("status", true);
-				 
-			 }else {
-				 	map.put("records", list);
-		            map.put("message", "User not found");
-		            map.put("status", false);
-		        }
-
-		    } catch (Exception e) {
-		        map.put("records", list);
-		        map.put("message", "Error retrieving user data");
-		        map.put("status", false);
-		    }
-		 
-		 return map;
-	}
 	
-
 	@Override
 	public Map<String,Object> findAllProducts() {
 		Map<String,Object> map=new HashMap<>();

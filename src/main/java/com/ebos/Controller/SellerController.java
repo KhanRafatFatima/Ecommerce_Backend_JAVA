@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ebos.Request.AddCategoryRequest;
 import com.ebos.Request.AddProductRequest;
-import com.ebos.Response.DeleteResponse;
 import com.ebos.Response.SetListResponse;
 import com.ebos.Service.SellerService;
 import com.ebos.Service.UserService;
@@ -107,23 +106,4 @@ public class SellerController {
 //	        return new ResponseEntity<>(response, httpStatus);
 //	    }
 	 
-	 
-	 
-	 
-	 
-	 
-	 
-	
-	
-	@DeleteMapping("/deleteuser")
-    public ResponseEntity<?> deleteUser() {
-		
-		try {
-			return new ResponseEntity<DeleteResponse>(userService.deleteUser(), HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<DeleteResponse>(userService.deleteUser(),
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
 }

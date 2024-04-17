@@ -17,8 +17,6 @@ public interface BuyerService {
 	
     public ApiResponse addPayment(UserOrderProductRequest userOrderProductRequest);
     
-    public Map<String, Object> getUserData(); 
-    
     public Map<String,Object> findAllProducts();
     
     public Map<String,Object> findAllCategory();
